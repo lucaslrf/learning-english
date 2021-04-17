@@ -1,48 +1,37 @@
 import React from "react";
-import './App.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import "./App.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Paperbase from "./components/Paperbase";
+import SignIn from "./components/SingIn";
+import Activity from "./pages/activities/Activity";
+import Challenge from "./pages/challenges/Challenge";
+import MaterialStudent from "./pages/materials/MaterialStudent";
+import Flashcard from "./pages/flashcards/Flashcard";
+import Content from "./components/Content";
 
 function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/activities">Atividades</Link>
-            </li>
-            <li>
-              <Link to="/challenges">Desafios</Link>
-            </li>
-          </ul>
-          <li>
-              <Link to="/materials">Materiais</Link>
-          </li>
-          <li>
-            <Link to="/flashcards">FlashCards</Link>
-          </li>
-        </nav>
-
-        <Switch>
-          <Route path="/activities">
-            {/* <About /> */}
-          </Route>
-          <Route path="/challenges">
-            {/* <Users /> */}
-          </Route>
-          <Route path="/">
-            {/* <Home /> */}
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/challenges">
+          <Paperbase>
+            <Challenge />
+          </Paperbase>
+        </Route>
+        <Route path="/materials">
+          <Paperbase>
+            <MaterialStudent />
+          </Paperbase>
+        </Route>
+        <Route path="/flashcards">
+          <Paperbase>
+            <Flashcard />
+          </Paperbase>
+        </Route>
+        <Route path="/">
+          <Paperbase />
+        </Route>
+      </Switch>
     </Router>
   );
 }
