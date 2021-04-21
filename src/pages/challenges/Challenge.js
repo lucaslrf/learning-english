@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Card  from "../../components/Card"
+import {Title} from "../challenges/styled"
 
 const Challenge = () => {
   const [challenges, setChallenges] = useState([]);
@@ -7,169 +9,175 @@ const Challenge = () => {
   useEffect(() => {
     const loadChallenges = async () => {
     const data =  [
-        {
-          _id: "607ae52b1ec8816774b98dbc",
-          index: 0,
-          name: "do ipsum incididunt sit culpa",
-          narrative:
-            "ipsum voluptate id sunt nostrud anim amet sit laboris id eu adipisicing ipsum nisi aliqua irure ut magna quis ea Lorem consectetur sunt culpa do ullamco aliqua aliquip do veniam ipsum eiusmod quis in nisi ad laboris aliqua culpa anim proident consequat in occaecat nisi nisi eu occaecat ad dolor",
-          quests: [
-            {
-              id: 0,
-              name: "non",
-              description: "dolor",
-              position: 2258,
-            },
-            {
-              id: 1,
-              name: "laboris",
-              description: "sint",
-              position: 6221,
-            },
-            {
-              id: 2,
-              name: "ipsum",
-              description: "dolor",
-              position: 9665,
-            },
-          ],
-        },
-        {
-          _id: "607ae52b7620fcd6bc9918e2",
-          index: 1,
-          name: "sit nostrud eu cupidatat non",
-          narrative:
-            "excepteur pariatur irure enim aliqua occaecat ut exercitation eiusmod in nisi pariatur non id culpa exercitation anim cupidatat laboris eiusmod pariatur excepteur incididunt laboris enim non labore in ex ex cupidatat culpa voluptate anim dolore anim labore enim ut dolor laboris reprehenderit elit excepteur et ea labore et eu minim",
-          quests: [
-            {
-              id: 0,
-              name: "cillum",
-              description: "consequat",
-              position: 2315,
-            },
-            {
-              id: 1,
-              name: "culpa",
-              description: "culpa",
-              position: 9637,
-            },
-            {
-              id: 2,
-              name: "et",
-              description: "labore",
-              position: 6500,
-            },
-          ],
-        },
-        {
-          _id: "607ae52b808c2930abd9bd92",
-          index: 2,
-          name: "sint cillum cupidatat officia eu",
-          narrative:
-            "tempor sint nisi laborum cupidatat laborum magna laboris reprehenderit sint cillum elit officia esse nostrud voluptate cupidatat exercitation minim dolore occaecat tempor mollit nostrud est ullamco consectetur qui reprehenderit non quis nostrud occaecat ullamco irure adipisicing irure aliqua sunt aliqua dolore est et reprehenderit dolore occaecat laboris Lorem enim eiusmod",
-          quests: [
-            {
-              id: 0,
-              name: "dolore",
-              description: "deserunt",
-              position: 5966,
-            },
-            {
-              id: 1,
-              name: "deserunt",
-              description: "eiusmod",
-              position: 9822,
-            },
-            {
-              id: 2,
-              name: "ullamco",
-              description: "sint",
-              position: 9018,
-            },
-          ],
-        },
-        {
-          _id: "607ae52b16401da9f4fd0bcc",
-          index: 3,
-          name: "amet enim fugiat velit nisi",
-          narrative:
-            "cillum reprehenderit eiusmod veniam anim ex tempor sint nostrud ad exercitation in culpa velit aliqua velit sunt deserunt qui Lorem ad nisi quis aute magna duis cillum officia adipisicing eiusmod pariatur nostrud nulla ad aute tempor velit id sit excepteur id ea excepteur veniam est consequat nisi veniam exercitation do",
-          quests: [
-            {
-              id: 0,
-              name: "occaecat",
-              description: "mollit",
-              position: 7780,
-            },
-            {
-              id: 1,
-              name: "est",
-              description: "cillum",
-              position: 737,
-            },
-            {
-              id: 2,
-              name: "reprehenderit",
-              description: "incididunt",
-              position: 8385,
-            },
-          ],
-        },
-        {
-          _id: "607ae52bd3fb91b629e37d6c",
-          index: 4,
-          name: "occaecat qui exercitation laboris ut",
-          narrative:
-            "pariatur dolor sit dolore consequat officia voluptate aliqua reprehenderit dolor sunt voluptate ad laboris irure et Lorem sunt cillum nulla nostrud consectetur laborum ad est labore commodo fugiat proident ipsum commodo proident elit ut nisi aute irure aliqua commodo ullamco nisi reprehenderit nostrud dolore exercitation tempor pariatur laboris qui sunt",
-          quests: [
-            {
-              id: 0,
-              name: "nulla",
-              description: "ea",
-              position: 9421,
-            },
-            {
-              id: 1,
-              name: "officia",
-              description: "velit",
-              position: 3013,
-            },
-            {
-              id: 2,
-              name: "minim",
-              description: "occaecat",
-              position: 9778,
-            },
-          ],
-        },
-        {
-          _id: "607ae52bc8c813f02d479e65",
-          index: 5,
-          name: "Lorem enim ipsum excepteur et",
-          narrative:
-            "laboris incididunt ex eiusmod eu amet cillum ex dolor irure commodo veniam dolore commodo commodo occaecat dolore qui nulla cupidatat nostrud incididunt consectetur culpa veniam enim duis quis esse sit et nulla duis Lorem laboris eiusmod ullamco irure sunt aliqua aute sunt est tempor amet ex ullamco elit id duis",
-          quests: [
-            {
-              id: 0,
-              name: "commodo",
-              description: "deserunt",
-              position: 224,
-            },
-            {
-              id: 1,
-              name: "occaecat",
-              description: "cupidatat",
-              position: 4337,
-            },
-            {
-              id: 2,
-              name: "consequat",
-              description: "deserunt",
-              position: 5154,
-            },
-          ],
-        },
-      ];
+      {
+        "_id": "607f7fb69c0499e76082d660",
+        "index": 0,
+        "name": "est sunt qui velit voluptate",
+        "description": "labore do dolor nostrud enim consectetur consectetur reprehenderit consectetur ad reprehenderit reprehenderit ea pariatur ad minim qui laborum qui laboris",
+        "narrative": "ad tempor ex dolor et nisi qui excepteur qui reprehenderit sit anim sit duis non laborum dolor anim do Lorem consequat eiusmod laborum voluptate ea ut excepteur sint nostrud consectetur sint irure sint sunt ad eu cupidatat in aliqua qui magna exercitation eiusmod do cillum occaecat voluptate esse consequat sunt",
+        "status": "FINISHED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "minim",
+            "description": "laboris",
+            "position": 3514
+          },
+          {
+            "id": 1,
+            "name": "pariatur",
+            "description": "eiusmod",
+            "position": 3234
+          },
+          {
+            "id": 2,
+            "name": "duis",
+            "description": "deserunt",
+            "position": 7615
+          }
+        ]
+      },
+      {
+        "_id": "607f7fb63491278d301f931f",
+        "index": 1,
+        "name": "quis cillum nostrud non ullamco",
+        "description": "duis elit pariatur consequat elit esse ullamco mollit laboris ad duis non officia voluptate ut do consequat amet nulla culpa",
+        "narrative": "ex elit nostrud esse officia enim sit dolor enim adipisicing eu duis ex Lorem ullamco qui in reprehenderit ad ipsum dolor sint fugiat commodo nisi mollit dolore nostrud labore magna nisi et exercitation culpa magna nulla ad magna officia qui cillum sunt mollit in adipisicing aliquip do pariatur nulla elit",
+        "status": "STARTED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "voluptate",
+            "description": "deserunt",
+            "position": 8082
+          },
+          {
+            "id": 1,
+            "name": "nostrud",
+            "description": "aute",
+            "position": 3962
+          },
+          {
+            "id": 2,
+            "name": "aute",
+            "description": "ea",
+            "position": 6539
+          }
+        ]
+      },
+      {
+        "_id": "607f7fb68992ae3f5a36fe38",
+        "index": 2,
+        "name": "laboris sit laboris officia est",
+        "description": "cillum ullamco Lorem consectetur qui aute aute aliqua aliqua ullamco laborum ad veniam in velit esse laboris duis minim pariatur",
+        "narrative": "Lorem labore est consequat ullamco pariatur tempor laborum magna deserunt ullamco cupidatat qui occaecat adipisicing id do laborum minim amet nisi ullamco laboris exercitation sint est exercitation magna laborum occaecat quis aliqua proident ea do ex nulla ad et adipisicing excepteur deserunt anim consectetur sunt non in enim exercitation reprehenderit",
+        "status": "STARTED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "veniam",
+            "description": "nulla",
+            "position": 9612
+          },
+          {
+            "id": 1,
+            "name": "ut",
+            "description": "incididunt",
+            "position": 2416
+          },
+          {
+            "id": 2,
+            "name": "sit",
+            "description": "mollit",
+            "position": 5902
+          }
+        ]
+      },
+      {
+        "_id": "607f7fb6e2cadaf74dc8b9b3",
+        "index": 3,
+        "name": "culpa amet excepteur dolor culpa",
+        "description": "aliquip consequat anim aliquip mollit aliqua aliquip est nostrud irure sit ullamco consectetur amet esse quis cillum ex nostrud enim",
+        "narrative": "esse cillum aute anim nulla esse veniam qui ipsum nulla consequat id reprehenderit exercitation ex cillum ipsum est eu Lorem eiusmod adipisicing quis voluptate commodo elit ullamco dolore consequat deserunt esse amet tempor occaecat do dolor anim duis nulla officia consequat consectetur eiusmod magna nostrud deserunt ipsum exercitation sint et",
+        "status": "STARTED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "veniam",
+            "description": "laboris",
+            "position": 5963
+          },
+          {
+            "id": 1,
+            "name": "aliquip",
+            "description": "deserunt",
+            "position": 2609
+          },
+          {
+            "id": 2,
+            "name": "excepteur",
+            "description": "id",
+            "position": 6746
+          }
+        ]
+      },
+      {
+        "_id": "607f7fb6a5c3872c133d191b",
+        "index": 4,
+        "name": "culpa do enim proident sit",
+        "description": "esse ea dolore laborum proident cillum elit irure occaecat nostrud est commodo eu id nisi dolore ex duis exercitation aliquip",
+        "narrative": "voluptate proident deserunt in ex do esse ipsum sint sit consectetur labore sint laborum eiusmod enim nostrud esse pariatur ex velit qui tempor officia adipisicing ut cillum velit aute do commodo commodo quis aute ex excepteur adipisicing laborum cupidatat ad labore id occaecat ipsum excepteur voluptate laborum ullamco enim eiusmod",
+        "status": "FINISHED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "ad",
+            "description": "deserunt",
+            "position": 3696
+          },
+          {
+            "id": 1,
+            "name": "culpa",
+            "description": "anim",
+            "position": 5828
+          },
+          {
+            "id": 2,
+            "name": "elit",
+            "description": "occaecat",
+            "position": 2789
+          }
+        ]
+      },
+      {
+        "_id": "607f7fb6d68235f01851f8e6",
+        "index": 5,
+        "name": "amet deserunt aute qui occaecat",
+        "description": "consectetur ut aute occaecat nulla nulla ipsum id occaecat esse quis id culpa non culpa magna amet incididunt fugiat deserunt",
+        "narrative": "exercitation non excepteur velit nulla non tempor occaecat amet incididunt laboris laboris fugiat sit incididunt id minim laborum adipisicing et magna Lorem quis sit veniam esse sint mollit esse pariatur dolore proident quis minim exercitation tempor occaecat veniam incididunt incididunt esse enim duis ea sunt officia anim id labore labore",
+        "status": "FINISHED",
+        "quests": [
+          {
+            "id": 0,
+            "name": "elit",
+            "description": "proident",
+            "position": 7291
+          },
+          {
+            "id": 1,
+            "name": "ut",
+            "description": "fugiat",
+            "position": 4749
+          },
+          {
+            "id": 2,
+            "name": "ut",
+            "description": "nisi",
+            "position": 3320
+          }
+        ]
+      }
+    ]
 
       setChallenges(data);
       setLoading(false);
@@ -186,9 +194,10 @@ const Challenge = () => {
 
   return (
     <React.Fragment>
+      <Title>Desafios</Title>
       {challenges.map((item, index) => (
         <div key={`${index}-${item._id}`}>
-          <p>{item.names}</p>
+          <Card name={item.name} description={item.description} status={item.status}></Card>
         </div>
       ))}
     </React.Fragment>
