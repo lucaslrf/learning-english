@@ -88,7 +88,7 @@ function Header(props) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Seja bem vindo ao Tripo quest
+                Seja bem vindo ao TripQuest
               </Typography>
             </Grid>
             {/* <Grid item>

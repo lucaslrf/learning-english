@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,16 +22,15 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const categories = [
   {
     id: '',
     children: [
-      { id: 'Início', icon: <HomeIcon />, active: true, path: '/'  },
-      { id: 'Desafios', icon: <AirplanemodeActiveIcon />, path: '/challenges'  },
-      { id: 'Materiais', icon: <ListAltIcon />,  path: '/materials'  },
-      { id: 'FlashCards', icon: <Filter9PlusIcon />,  path: '/flashcards'  },
+      { id: 'Início', icon: <HomeIcon />, path: '/'  },
+      { id: 'Narrativas', icon: <AirplanemodeActiveIcon />, path: '/challenges'  },
+      { id: 'Materiais', icon: <ListAltIcon />,  path: '/materials'  }
     ],
   }
 ];
@@ -88,7 +87,11 @@ const styles = (theme) => ({
 });
 
 function Navigator(props) {
+
   const { classes, ...other } = props;
+  const pathCurrent = useLocation()
+
+  console.log('Navigator: ', pathCurrent)
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -120,11 +123,12 @@ function Navigator(props) {
               </ListItemText>
             </ListItem>
             {children.map(({ id: childId, icon, active, path}) => (
-              <Link key={childId} to={path} className={clsx(classes.item, classes.a, active && classes.itemActiveItem)}>
+              
+              <Link key={childId} to={path} className={clsx(classes.item, classes.a, path === pathCurrent.pathname && classes.itemActiveItem)}>
               <ListItem
                 key={childId}
                 button
-                className={clsx(classes.item, active && classes.itemActiveItem)}
+                className={clsx(classes.item, path === pathCurrent.pathname && classes.itemActiveItem)}
               >
                 <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
                 

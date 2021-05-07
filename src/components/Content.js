@@ -72,7 +72,7 @@ function Content(props) {
         </Toolbar>
       </AppBar>
       <div className={classes.contentWrapper}>
-        {children ? children : 'CONTEÚDO'}
+        {children ? children : 'HOME'}
         <Typography color="textSecondary" align="center">
         </Typography>
       </div>

@@ -9,6 +9,17 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import Button from '@material-ui/core/Button';
+import { dataRPG } from '../services/dados';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,9 +60,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MediaControlCard({name, description, status}) {
+export default function MediaControlCard({item}) {
   const classes = useStyles();
   const theme = useTheme();
+  
+  let history = useHistory();
+
+  function onPlay(){
+    console.log('TESTE ID OnPLay narrative: ', item._id)
+    const data = dataRPG
+    console.log('dataRPG Card', data)
+    const teste = data.find((dado) => dado._id === item._id)
+    console.log('teste Card', teste)
+
+    history.push(`/contentGame/`, item)
+  }
 
   return (
     <Card className={classes.root}>
@@ -61,20 +84,20 @@ export default function MediaControlCard({name, description, status}) {
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
-            {name}
+            {item.name}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {description}
+            {item.description}
           </Typography>
         </CardContent>
         <div className={classes.controls}>
-            {status !== "FINISHED" ?
-          <IconButton aria-label="play/pause">
+            {item.status !== "FINISHED" ?
+          <Button onClick={() => { onPlay(item._id) }} aria-label="play/pause">
             <PlayArrowIcon className={classes.playIcon} />
             <Typography variant="subtitle1" color="textSecondary">
                 Iniciar
             </Typography>
-          </IconButton> : 
+          </Button> : 
           <IconButton className={classes.iconButtonDoneAll}>    
               <DoneAllIcon  className={classes.doneAllIcon} />
               <Typography variant="subtitle1" color="textSecondary">

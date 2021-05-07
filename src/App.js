@@ -8,6 +8,9 @@ import Challenge from "./pages/challenges/Challenge";
 import MaterialStudent from "./pages/materials/MaterialStudent";
 import Flashcard from "./pages/flashcards/Flashcard";
 import Content from "./components/Content";
+import ContentGame from "./pages/contentGame/ContentGame";
+import Quest from "./pages/quests/Quest";
+
 
 function App() {
   return (
@@ -23,9 +26,24 @@ function App() {
             <MaterialStudent />
           </Paperbase>
         </Route>
-        <Route path="/flashcards">
+        <Route path="/contentGame">
           <Paperbase>
-            <Flashcard />
+            <ContentGame />
+          </Paperbase>
+        </Route>
+        <Route path="/contentGame/:id">
+          <Paperbase>
+            <ContentGame />
+          </Paperbase>
+        </Route>
+        <Route path="/quest">
+          <Paperbase>
+            <Quest />
+          </Paperbase>
+        </Route>
+        <Route path="/quest/:id">
+          <Paperbase>
+            <Quest />
           </Paperbase>
         </Route>
         <Route path="/">
