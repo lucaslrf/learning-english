@@ -24,16 +24,16 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
 import { Link, useLocation } from 'react-router-dom';
 
-const categories = [
-  {
-    id: '',
-    children: [
-      { id: 'Início', icon: <HomeIcon />, path: '/'  },
-      { id: 'Narrativas', icon: <AirplanemodeActiveIcon />, path: '/challenges'  },
-      { id: 'Materiais', icon: <ListAltIcon />,  path: '/materials'  }
-    ],
-  }
-];
+// const categories = [
+//   {
+//     id: '',
+//     children: [
+//       { id: 'Início', icon: <HomeIcon />, path: '/'  },
+//       { id: 'Narrativas', icon: <AirplanemodeActiveIcon />, path: 'student/challenges'  },
+//       { id: 'Materiais', icon: <ListAltIcon />,  path: '/materials'  }
+//     ],
+//   }
+// ];
 
 const styles = (theme) => ({
   categoryHeader: {
@@ -90,6 +90,10 @@ function Navigator(props) {
 
   const { classes, ...other } = props;
   const pathCurrent = useLocation()
+  const [categories, setCategories] = useState(props.categories)
+
+  console.log('propsteste navigator: ',props)
+
 
   console.log('Navigator: ', pathCurrent)
 

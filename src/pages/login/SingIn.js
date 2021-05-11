@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,14 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,  
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
 function Copyright() {
   return (
@@ -47,7 +55,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+
+  const history = useHistory();
   const classes = useStyles();
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  function onSubmit(){
+    console.log('teste: ', email, senha)
+    
+    history.push(`/student`)
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -70,6 +89,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
@@ -81,17 +102,19 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Lembrar-me"
-          />
+          /> */}
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={() => onSubmit()}
           >
             Entrar
           </Button>

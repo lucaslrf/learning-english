@@ -17,6 +17,7 @@ import {
   Route,
   Link,
   Redirect,
+  useRouteMatch,
   useHistory,
   useLocation
 } from "react-router-dom";
@@ -63,17 +64,18 @@ const useStyles = makeStyles((theme) => ({
 export default function MediaControlCard({item}) {
   const classes = useStyles();
   const theme = useTheme();
+  let { path, url } = useRouteMatch();
   
-  let history = useHistory();
+  const history = useHistory();
 
   function onPlay(){
     console.log('TESTE ID OnPLay narrative: ', item._id)
     const data = dataRPG
     console.log('dataRPG Card', data)
     const teste = data.find((dado) => dado._id === item._id)
-    console.log('teste Card', teste)
+    console.log('teste Card',` ${path}/contentGame`)
 
-    history.push(`/contentGame/`, item)
+    history.push(`${path}/contentGame`, item)
   }
 
   return (

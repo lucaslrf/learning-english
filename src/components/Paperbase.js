@@ -166,6 +166,7 @@ function Paperbase(props) {
   const { children } = props;
 console.log('children: ', children)
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  console.log('props base Paperbase: ', props)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -181,11 +182,12 @@ console.log('children: ', children)
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
               open={mobileOpen}
+              categories={props.categories}
               onClose={handleDrawerToggle}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} />
+            <Navigator PaperProps={{ style: { width: drawerWidth } }} categories={props.categories} />
           </Hidden>
         </nav>
         <div className={classes.app}>

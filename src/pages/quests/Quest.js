@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import {
     BrowserRouter as Router,
     Switch,
+    useRouteMatch,
     Route,
     Link,
     Redirect,
@@ -25,10 +26,13 @@ import ActionsHeader from "../../components/ActionsHeader";
 
 const Quest = () => {
 
-    const [question, setQuestion] = useState([]);
+    let { path, url } = useRouteMatch();
+    const [quest, setQuest] = useState([]);
     const [positionQuest, setPositionQuest] = useState(0)
-
+    let history = useHistory();
     const pathCurrent = useLocation()
+
+    console.log('pathCurrent quest: ', pathCurrent.state.quests)
 
     useEffect(() => {
 
@@ -46,17 +50,25 @@ const Quest = () => {
              * 
              */
             //idNarrativa, possitionQuest
-            
+            console.log('pathCurrent.state.quests[positionQuest]: ', pathCurrent.state.quests[positionQuest])
+            if(pathCurrent.state.quests[positionQuest]){
+              setQuest(pathCurrent.state.quests[positionQuest])
+              console.log('quest  nova: ', quest)
+            }else{
+              history.push(`${path}/finished`)
+            }
 
         }
 
         loadQuestion()
 
-    }, [])
+    }, [positionQuest])
 
     
     function onNext(){
         console.log('onNext')
+        let newPosition = positionQuest
+        setPositionQuest(++newPosition)
     }
 
   return (
@@ -66,13 +78,15 @@ const Quest = () => {
 
       <Content>
         <Title>
-            QUEST 1
+            {quest.name}
           </Title>
-         
+          <Typography component="p" variant="body1">
+            {quest.description}
+          </Typography>
       </Content>
        
        <FooterActions>
-            <Button>Next</Button>
+            <Button onClick={() => onNext()}>Next</Button>
        </FooterActions>
     </React.Fragment>
   );
