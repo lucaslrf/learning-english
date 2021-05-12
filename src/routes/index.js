@@ -56,7 +56,7 @@ const Routes = () => {
       {...rest}
       render={({ location }) => {
         // const tipoUsuario = AuthService.getTipoUsuario();
-        const tipoUsuario = "Aluno";
+        const tipoUsuario = "Administrador";
 
         // if (!AuthService.loggedIn()) {
         if(tipoUsuario === "Login"){
@@ -70,7 +70,7 @@ const Routes = () => {
         } else if (tipoUsuario === "Administrador") {
           return (
             <Redirect
-              to={{ pathname: "/manager", state: { from: location } }}
+              to={{ pathname: "/admin", state: { from: location } }}
             />
           );
         } else if (tipoUsuario === "Professor") {
@@ -87,13 +87,13 @@ const Routes = () => {
   return (
     <Router>      
        <Switch>         
-        <ManagerRoute  path="/admin">
+        <ManagerRoute path="/admin">
           <Manager />
         </ManagerRoute>
         <StudentRoute path="/student">
           <Student />
         </StudentRoute>
-        <Route path="/">
+        <Route exact path="/">
           <SignIn />
         </Route>
        </Switch>  
