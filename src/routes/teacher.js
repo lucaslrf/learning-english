@@ -1,64 +1,100 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
-  AppBar,
-  Button,
-  Divider,
-  Drawer,
-  Hidden,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
+  Switch,
+  Route,
+  useRouteMatch,
+  Link,
+  Redirect,
+  useLocation,
+} from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+// import AuthService from "../services/auth";
+import Paperbase from "../components/Paperbase";
+import TeacherList from "../pages/managerTeacher/TeacherList";
+import FormTeacher from "../pages/managerTeacher/FormTeacher";
+import StudentList from "../pages/managerStudent/StudentList";
+import FormStudent from "../pages/managerStudent/FormStudent";
+import HomeIcon from "@material-ui/icons/Home";
+import AirplanemodeActiveIcon from "@material-ui/icons/AirplanemodeActive";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import NarrativeList from "../pages/managerNarrative/NarrativeList";
+import FormNarrative from "../pages/managerNarrative/FormNarrative";
+import QuestList from "../pages/managerQuest/QuestList";
+import FormQuest from "../pages/managerQuest/FormQuest";
+import MaterialList from "../pages/managerMaterials/MaterialList";
+import FormMaterial from "../pages/managerMaterials/FormMaterial";
 
-const Teacher = () => {
-  <Router>
-    <Switch>
-      <Route exact path={`${path}/unidades`}>
-        <Unidades />
-      </Route>
-      <Route path={`${path}/unidades/adicionar`}>
-        <FormUnidade />
-      </Route>
-      <Route path={`${path}/unidades/editar/:id`}>
-        <FormUnidade />
-      </Route>
-      <Route exact path={`${path}/categorias`}>
-        <Categorias />
-      </Route>
-      <Route path={`${path}/categorias/adicionar`}>
-        <FormCategoria />
-      </Route>
-      <Route path={`${path}/categorias/editar/:id`}>
-        <FormCategoria />
-      </Route>
-      <Route exact path={`${path}/postagens`}>
-        <Postagens />
-      </Route>
-      <Route path={`${path}/postagens/adicionar`}>
-        <FormPostagem />
-      </Route>
-      <Route path={`${path}/postagens/editar/:id`}>
-        <FormPostagem />
-      </Route>
-      <Route exact path={`${path}/usuarios`}>
-        <Usuarios />
-      </Route>
-      <Route path={`${path}/usuarios/adicionar`}>
-        <FormUsuario />
-      </Route>
-      <Route path={`${path}/usuarios/editar/:id`}>
-        <FormUsuario />
-      </Route>
-    </Switch>
-  </Router>;
-};
+export default function Teacher({ children, ...rest }) {
+  
+  const location = useLocation();
+  let { path, url } = useRouteMatch();
 
-export default Teacher;
+  const categories = [
+    {
+      id: "",
+      children: [
+        { id: "Início", icon: <HomeIcon />, path: `${path}` },
+        {
+          id: "Narratives",
+          icon: <AirplanemodeActiveIcon />,
+          path: `${path}/narratives`,
+        },
+        { id: "Quests", icon: <ListAltIcon />, path: `${path}/quests` },
+        { id: "Materials", icon: <ListAltIcon />, path: `${path}/materials` },
+      ],
+    },
+  ];
+  
+  return (
+    <>
+      <Route exact path={`${path}/narratives`}>
+        <Paperbase categories={categories}>
+          <NarrativeList />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/narratives/new`}>
+        <Paperbase categories={categories}>
+          <FormNarrative />
+        </Paperbase>
+      </Route>
+      <Route path={`${path}/narratives/edit/:id`}>
+        <Paperbase categories={categories}>
+          <FormNarrative />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/quests`}>
+        <Paperbase categories={categories}>
+          <QuestList />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/quests/new`}>
+        <Paperbase categories={categories}>
+          <FormQuest />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/quests/edit/:id`}>
+        <Paperbase categories={categories}>
+          <FormQuest />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/materials`}>
+        <Paperbase categories={categories}>
+          <MaterialList />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/materials/new`}>
+        <Paperbase categories={categories}>
+          <FormMaterial />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/materials/edit/:id`}>
+        <Paperbase categories={categories}>
+          <FormMaterial />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/`}>
+        <Paperbase categories={categories} />
+      </Route>
+    </>
+  );
+}

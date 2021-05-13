@@ -13,6 +13,7 @@ import Paperbase from "../components/Paperbase";
 import TeacherList from "../pages/managerTeacher/TeacherList";
 import FormTeacher from "../pages/managerTeacher/FormTeacher";
 import StudentList from "../pages/managerStudent/StudentList";
+import FormStudent from "../pages/managerStudent/FormStudent";
 import HomeIcon from "@material-ui/icons/Home";
 import AirplanemodeActiveIcon from "@material-ui/icons/AirplanemodeActive";
 import ListAltIcon from "@material-ui/icons/ListAlt";
@@ -58,6 +59,11 @@ export default function Manager({ children, ...rest }) {
       <Route exact path={`${path}/students`}>
         <Paperbase categories={categories}>
           <StudentList />
+        </Paperbase>
+      </Route>
+      <Route exact path={`${path}/students/new`}>
+        <Paperbase categories={categories}>
+          <FormStudent />
         </Paperbase>
       </Route>
       <Route exact path={`${path}/`}>

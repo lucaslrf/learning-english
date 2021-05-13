@@ -5,6 +5,7 @@ import {Title} from "../../components/globalStyleds"
 import { Container, Actions } from "./styleTeacher";
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
+import Form from '../../components/Form';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,26 +46,13 @@ const FormTeacher = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <form className={classes.root}  noValidate autoComplete="off">
+      <Form>
         <div>
           <TextField id="outlined-basic" label="Nome do professor" variant="outlined" />
           <TextField id="outlined-basic" label="Login do professor" variant="outlined" />
           <TextField id="outlined-basic" label="Password do professor" variant="outlined" />
         </div>
-        <div>
-        <Button
-        variant="contained"
-        color="primary"
-        size="medium"
-        className={classes.button}
-        startIcon={<SaveIcon />}
-      >
-        Save
-      </Button>
-      <Button className={classes.button} variant="contained">Cancelar</Button>
-      </div>
-
-      </form>
+      </Form>
     </Container>
   );
 };

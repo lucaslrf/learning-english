@@ -1,8 +1,9 @@
-import React from "react";
-import { BrowserRouter as Router, Redirect, Switch, Route } from "react-router-dom";
-import SignIn from "../pages/login/SingIn";
-import Manager from "./manager";
-import Student from "./student";
+import React from 'react';
+import { BrowserRouter as Router, Redirect, Switch, Route } from 'react-router-dom';
+import SignIn from '../pages/login/SingIn';
+import Manager from './manager';
+import Student from './student';
+import Teacher from './teacher';
 
 const Routes = () => {
   const ManagerRoute = ({ children, ...rest }) => {
@@ -29,6 +30,29 @@ const Routes = () => {
   };
 
   const StudentRoute = ({ children, ...rest }) => {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) => (
+          // AuthService.loggedIn() &&
+          // AuthService.getTipoUsuario() === "Teacher" ? (
+          //   children
+          // ) :
+          // "Teacher" === "Teacher" ? (
+            children
+          // ):
+          // <Redirect
+          //   to={{
+          //     pathname: "/login",
+          //     state: { from: location },
+          //   }}
+          // />
+        )}
+      />
+    );
+  };
+
+  const TeacherRoute = ({ children, ...rest }) => {
     return (
       <Route
         {...rest}
@@ -93,6 +117,9 @@ const Routes = () => {
         <StudentRoute path="/student">
           <Student />
         </StudentRoute>
+        <TeacherRoute path="/teacher">
+          <Teacher />
+        </TeacherRoute>
         <Route exact path="/">
           <SignIn />
         </Route>

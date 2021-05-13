@@ -65,7 +65,7 @@ export default function SignIn() {
   function onSubmit(){
     console.log('teste: ', email, senha)
     
-    history.push(`/admin`)
+    history.push(`/teacher`)
   }
 
   return (
