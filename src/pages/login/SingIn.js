@@ -20,6 +20,8 @@ import {
   useHistory,
   useLocation
 } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import AuthService from "../../services/auth";
 
 function Copyright() {
   return (
@@ -58,12 +60,51 @@ export default function SignIn() {
 
   const history = useHistory();
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
   function onSubmit(){
-    console.log('teste: ', email, senha)
+    e.preventDefault();
+    if (!email || !senha) {
+      return enqueueSnackbar("Por favor, preencha todos os campos!", {
+        variant: "warning",
+      });
+    }
+
+    setLoading(true);
+    try {
+      const { data } = await api.post("login", {
+        email,
+        senha,
+      });
+
+      AuthService.setToken(data.token);
+
+      setLoading(false);
+
+      const tipoUsuario = AuthService.getTipoUsuario();
+
+      // if (tipoUsuario === "Cliente") {
+      //   if (typeof location.state === "string") {
+      //     return history.push(location.state);
+      //   }
+
+      //   return history.push("/");
+      // }
+
+      history.push(`/${tipoUsuario.toLowerCase()}`);
+    } catch (error) {
+      setLoading(false);
+      if (error?.response?.data?.mensagem) {
+        return enqueueSnackbar(error?.response?.data?.mensagem, {
+          variant: "error",
+        });
+      }
+
+      enqueueSnackbar("Erro ao fazer login!", { variant: "error" });
+    }
     
     history.push(`/teacher`)
   }

@@ -1,4 +1,5 @@
 import decode from "jwt-decode";
+import {  useHistory } from "react-router-dom";
 
 const TOKEN_KEY = "@trip-quest";
 
@@ -30,8 +31,9 @@ const AuthService = {
   },
 
   logout() {
+    const history = useHistory();
     localStorage.removeItem(TOKEN_KEY);
-    // history.push("/");
+    history.push("/");
   },
 
   getUsuario() {
