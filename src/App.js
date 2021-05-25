@@ -11,10 +11,13 @@ import Content from "./components/Content";
 import ContentGame from "./pages/contentGame/ContentGame";
 import Quest from "./pages/quests/Quest";
 import Routes from "./routes";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   return (
-    <Routes />
+    <SnackbarProvider>
+      <Routes />
+    </SnackbarProvider>
   );
 }
 

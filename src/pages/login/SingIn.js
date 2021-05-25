@@ -22,6 +22,7 @@ import {
 } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import AuthService from "../../services/auth";
+import api from "../../services/api";
 
 function Copyright() {
   return (
@@ -64,8 +65,9 @@ export default function SignIn() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function onSubmit(){
+  async function onSubmit(e){
     e.preventDefault();
     if (!email || !senha) {
       return enqueueSnackbar("Por favor, preencha todos os campos!", {
@@ -76,23 +78,16 @@ export default function SignIn() {
     setLoading(true);
     try {
       const { data } = await api.post("login", {
-        email,
-        senha,
+        email: email,
+        password: senha,
       });
 
       AuthService.setToken(data.token);
 
       setLoading(false);
 
-      const tipoUsuario = AuthService.getTipoUsuario();
-
-      // if (tipoUsuario === "Cliente") {
-      //   if (typeof location.state === "string") {
-      //     return history.push(location.state);
-      //   }
-
-      //   return history.push("/");
-      // }
+      const tipoUsuario = await AuthService.getTipoUsuario();
+      console.log('TIPO USUARIO: ', tipoUsuario)
 
       history.push(`/${tipoUsuario.toLowerCase()}`);
     } catch (error) {
@@ -105,8 +100,6 @@ export default function SignIn() {
 
       enqueueSnackbar("Erro ao fazer login!", { variant: "error" });
     }
-    
-    history.push(`/teacher`)
   }
 
   return (
@@ -155,7 +148,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => onSubmit()}
+            onClick={(e) => onSubmit(e)}
           >
             Entrar
           </Button>

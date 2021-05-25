@@ -4,28 +4,26 @@ import SignIn from '../pages/login/SingIn';
 import Manager from './manager';
 import Student from './student';
 import Teacher from './teacher';
+import AuthService from '../services/auth';
 
 const Routes = () => {
   const ManagerRoute = ({ children, ...rest }) => {
     return (
       <Route
-        {...rest}
-        render={({ location }) => (
-          // AuthService.loggedIn() &&
-          // AuthService.getTipoUsuario() === "Teacher" ? (
-          //   children
-          // ) :
-          // "Teacher" === "Teacher" ? (
-            children
-          // ):
-          // <Redirect
-          //   to={{
-          //     pathname: "/login",
-          //     state: { from: location },
-          //   }}
-          // />
-        )}
-      />
+      {...rest}
+      render={({ location }) => (
+        AuthService.loggedIn() &&
+        AuthService.getTipoUsuario() === "admin" ? (
+          children
+        ) :
+        <Redirect
+          to={{
+            pathname: "/",
+            state: { from: location },
+          }}
+        />
+      )}
+    />
     );
   };
 
@@ -34,19 +32,16 @@ const Routes = () => {
       <Route
         {...rest}
         render={({ location }) => (
-          // AuthService.loggedIn() &&
-          // AuthService.getTipoUsuario() === "Teacher" ? (
-          //   children
-          // ) :
-          // "Teacher" === "Teacher" ? (
+          AuthService.loggedIn() &&
+          AuthService.getTipoUsuario() === "student" ? (
             children
-          // ):
-          // <Redirect
-          //   to={{
-          //     pathname: "/login",
-          //     state: { from: location },
-          //   }}
-          // />
+          ) :
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
         )}
       />
     );
@@ -54,59 +49,23 @@ const Routes = () => {
 
   const TeacherRoute = ({ children, ...rest }) => {
     return (
-      <Route
+        <Route
         {...rest}
         render={({ location }) => (
-          // AuthService.loggedIn() &&
-          // AuthService.getTipoUsuario() === "Teacher" ? (
-          //   children
-          // ) :
-          // "Teacher" === "Teacher" ? (
+          AuthService.loggedIn() &&
+          AuthService.getTipoUsuario() === "teacher" ? (
             children
-          // ):
-          // <Redirect
-          //   to={{
-          //     pathname: "/login",
-          //     state: { from: location },
-          //   }}
-          // />
+          ) :
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
         )}
       />
     );
   };
-
-  const AccessRoute = ({ children, ...rest }) => (
-    <Route
-      {...rest}
-      render={({ location }) => {
-        // const tipoUsuario = AuthService.getTipoUsuario();
-        const tipoUsuario = "Administrador";
-
-        // if (!AuthService.loggedIn()) {
-        if(tipoUsuario === "Login"){
-          return children;
-        } else if (tipoUsuario === "Aluno") {
-          return (
-            <Redirect
-              to={{ pathname: "/student", state: { from: location } }}
-            />
-          );
-        } else if (tipoUsuario === "Administrador") {
-          return (
-            <Redirect
-              to={{ pathname: "/admin", state: { from: location } }}
-            />
-          );
-        } else if (tipoUsuario === "Professor") {
-          return (
-            <Redirect
-              to={{ pathname: "/teacher", state: { from: location } }}
-            />
-          );
-        }
-      }}
-    />
-  );
 
   return (
     <Router>      

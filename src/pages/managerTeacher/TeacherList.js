@@ -3,7 +3,7 @@ import {Title} from "../../components/globalStyleds"
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { dataTeacher } from "../../services/dadosTeacher";
 import { Button, makeStyles } from "@material-ui/core";
-import { Actions } from "./styleTeacher";
+import { Actions, ContainerButton } from "./styleTeacher";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {
   BrowserRouter as Router,
@@ -64,13 +64,10 @@ const TeacherList = () => {
   
   return (
     <React.Fragment>
-      <Actions>
-        <div>
-          <Title>Professores</Title>
-        </div>
-        <div>
+      <Actions>     
+        <ContainerButton>
           <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>          
-        </div>
+        </ContainerButton>
       </Actions>
       <DataTable rowsTable={rows} headCellsTable={headCells} nameTable={"Professores"}/>
     </React.Fragment>

@@ -4,6 +4,7 @@ import {  useHistory } from "react-router-dom";
 const TOKEN_KEY = "@trip-quest";
 
 const AuthService = {
+
   setToken(token) {
     localStorage.setItem(TOKEN_KEY, token);
   },
@@ -31,16 +32,14 @@ const AuthService = {
   },
 
   logout() {
-    const history = useHistory();
     localStorage.removeItem(TOKEN_KEY);
-    history.push("/");
   },
 
-  getUsuario() {
-    const token =this.getToken();
-
+  getTokenDecode() {
+    const token = this.getToken();
+    
     if(token === null) return
-
+    
     return decode(token);
   },
 
@@ -53,11 +52,21 @@ const AuthService = {
   },
 
   getTipoUsuario() {
-    const usuario = this.getUsuario()
+    const payload = this.getTokenDecode()
 
-    if(usuario === null) return
+    if(payload === null) return
 
-    return usuario?.tipo;
+    console.log('payload maroto: ', payload)
+
+    if(payload.role.includes('student')){
+      return 'student';
+    }else if(payload.role.includes('teacher')){
+      return 'teacher';
+    }else if(payload.role.includes('admin')){
+      return 'admin';
+    }
+    
+    return;
   },
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -16,6 +16,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import { makeStyles } from '@material-ui/core/styles';
+import AuthService from '../services/auth';
+import {
+  useHistory
+} from "react-router-dom";
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -41,7 +52,61 @@ const styles = (theme) => ({
   },
 });
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  paper: {
+    marginRight: theme.spacing(2),
+  },
+}));
+
 function Header(props) {
+
+  const classesMain = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+  const history = useHistory();
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleLogoutClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+
+    AuthService.logout();
+    history.push('/');
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
   const { classes, onDrawerToggle } = props;
 
   return (
@@ -62,15 +127,15 @@ function Header(props) {
               </Grid>
             </Hidden>
             <Grid item xs />
-            <Grid item>
+            {/* <Grid item>
               <Tooltip title="Alerts • No alerts">
                 <IconButton color="inherit">
                   <NotificationsIcon />
                 </IconButton>
               </Tooltip>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <IconButton color="inherit" className={classes.iconButtonAvatar}>
+              <IconButton ref={anchorRef} onClick={handleToggle} color="inherit" className={classes.iconButtonAvatar}>
                 <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
               </IconButton>
             </Grid>
@@ -120,6 +185,23 @@ function Header(props) {
           <Tab textColor="inherit" label="Usage" /> */}
         </Tabs>
       </AppBar>
+      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                    <MenuItem onClick={handleClose}>My points</MenuItem>
+                    <MenuItem onClick={handleLogoutClose}>Logout</MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
     </React.Fragment>
   );
 }
