@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -22,6 +22,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import DatatableHead from "./DatatableHead";
 import DatatableToolbar from "./DatatableToolbar";
+import { DataGrid } from "@material-ui/data-grid";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -73,7 +74,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable({rowsTable, headCellsTable, nameTable}) {
+export default function EnhancedTable({
+  rowsTable,
+  headCellsTable,
+  nameTable,
+}) {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
@@ -83,9 +88,9 @@ export default function EnhancedTable({rowsTable, headCellsTable, nameTable}) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows] = useState(rowsTable);
   const [headCells, setHeadCells] = useState(headCellsTable);
-  const [nameEntity, setNameEntity] = useState(nameTable)
+  const [nameEntity, setNameEntity] = useState(nameTable);
 
-  console.log('data table: ', rows, headCells)
+  console.log("headcells datatable: ", rows, headCells);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -143,7 +148,10 @@ export default function EnhancedTable({rowsTable, headCellsTable, nameTable}) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <DatatableToolbar numSelected={selected.length} nameTable={nameEntity} />
+        <DatatableToolbar
+          numSelected={selected.length}
+          nameTable={nameEntity}
+        />
         <TableContainer>
           <Table
             className={classes.table}
@@ -184,18 +192,15 @@ export default function EnhancedTable({rowsTable, headCellsTable, nameTable}) {
                           inputProps={{ "aria-labelledby": labelId }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      {headCells.map((attribute, index) => (
+                        <TableCell
+                          id={`${labelId}-${attribute}-${index}`}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row[attribute.id]}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   );
                 })}
