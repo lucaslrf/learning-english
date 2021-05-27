@@ -1,60 +1,46 @@
 import React, { useState, useEffect } from "react";
-import Card  from "../../components/Card"
-import {Title, FooterActions, Content} from "../contentGame/styled"
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
+import { Title, FooterActions, Content } from "../contentGame/styled"
 import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
 import Button from '@material-ui/core/Button';
 import {
-    BrowserRouter as Router,
-    Switch,
-    useRouteMatch,
-    Route,
-    Link,
-    Redirect,
-    useHistory,
-    useLocation,
-    useParams
-  } from "react-router-dom";
+  useRouteMatch,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 import ActionsHeader from "../../components/ActionsHeader";
 
 
 const ContentGame = () => {
 
-    let { path, url } = useRouteMatch();
-    const pathCurrent = useLocation()
-    let history = useHistory();
+  let { path } = useRouteMatch();
+  const pathCurrent = useLocation()
+  let history = useHistory();
 
-    console.log('pathCurrent', pathCurrent.state)
+  console.log('pathCurrent', pathCurrent.state)
 
-    function onContinue(){
-      console.log('teste Card', pathCurrent.state)
-  
-      history.push(`${path}/quest`, pathCurrent.state)
-    }
+  function onContinue() {
+    console.log('teste Card', pathCurrent.state)
+
+    history.push(`${path}/quest`, pathCurrent.state)
+  }
 
   return (
     <React.Fragment>
 
-    <ActionsHeader />
+      <ActionsHeader />
 
       <Content>
         <Title>
-            {pathCurrent.state.name}
-          </Title>
-          <Typography component="h6" variant="h6">
-            {pathCurrent.state.description}
-          </Typography>
+          {pathCurrent.state.name}
+        </Title>
+        <Typography component="h6" variant="h6">
+          {pathCurrent.state.description}
+        </Typography>
       </Content>
-       
-       <FooterActions>
-            <Button onClick={() => onContinue()}>Continuar</Button>
-       </FooterActions>
+
+      <FooterActions>
+        <Button onClick={() => onContinue()}>Continuar</Button>
+      </FooterActions>
     </React.Fragment>
   );
 };

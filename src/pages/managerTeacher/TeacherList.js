@@ -1,42 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {Title} from "../../components/globalStyleds"
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import { dataTeacher } from "../../services/dadosTeacher";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Actions, ContainerButton } from "./styleTeacher";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
   useRouteMatch,
-  useHistory,
-  useLocation
+  useHistory
 } from "react-router-dom";
 import DataTable from "../../components/DataTable";
+import api from "../../services/api";
 
 
 const TeacherList = () => {
 
-  const data = dataTeacher
-  let { path, url } = useRouteMatch();
-  
+  let { path } = useRouteMatch();
   const history = useHistory();
-
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-
-  async function buscaTeachers() {
-  
-  }
-  
-  const rows = [
-    createData("Cupcake", 'TESTE'),
-    createData("Donut", 'TESTE'),
-  ];
+  const [loading, setLoading] = useState(true);
+  const [teachers, setTeachers] = useState(null)
 
   const headCells = [
     {
@@ -45,21 +25,53 @@ const TeacherList = () => {
       disablePadding: true,
       label: "Nome",
     },
-    { id: "description", numeric: false, disablePadding: false, label: "Descrição" }
+    { id: "login", disablePadding: true, label: "Descrição" },
+    { id: "email", disablePadding: true, label: "Posição" },
   ];
 
-  function onCreateTeacher(){
+  useEffect(() => {
+
+    const loadTeachers = async () => {
+      setLoading(true);
+
+      try {
+        const { data } = await api.get(
+          `/get/teachers/${itemsPerPage}`
+        );
+
+        console.log('data: ', data)
+
+        setTeachers(data.teachers.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+
+    loadTeachers();
+
+  }, []);
+
+  if (loading) {
+    return (
+      <div></div>
+    )
+  }
+
+
+
+  function onCreateTeacher() {
     history.push(`${path}/new`)
   }
-  
+
   return (
     <React.Fragment>
-      <Actions>     
+      <Actions>
         <ContainerButton>
-          <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>          
+          <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </ContainerButton>
       </Actions>
-      <DataTable rowsTable={rows} headCellsTable={headCells} nameTable={"Professores"}/>
+      <DataTable rowsTable={tecahers} headCellsTable={headCells} nameTable={"Professores"} />
     </React.Fragment>
   );
 };

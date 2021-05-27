@@ -1,10 +1,10 @@
-import { Button, TextField, FormControl, InputLabel, Input, FormHelperText } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
+import { Button, TextField } from "@material-ui/core";
 import { useHistory } from "react-router";
-import {Title, Container, Actions } from "../../components/globalStyleds"
+import { Title, Container, Actions } from "../../components/globalStyleds"
 import { makeStyles } from '@material-ui/core/styles';
-import SaveIcon from '@material-ui/icons/Save';
 import Form from '../../components/Form';
+import api from "../../services/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,18 +22,83 @@ const useStyles = makeStyles((theme) => ({
 const FormStudent = () => {
 
   const classes = useStyles();
-  const history = useHistory()
+  const history = useHistory();
+  const [student, setStudent] = useState(null);
 
-  function onBack(){
+  const [formInput, setFormInput] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    {
+      name: "",
+      login: "",
+      email: "",
+      password: "",
+    }
+  );
+
+  function onBack() {
     history.goBack()
   }
 
-  function isNew(){
-   return history.location.pathname.includes('new')
+  useEffect(() => {
+
+    const loadStudent = async () => {
+      const id = isNew() ? null : match.params.id;
+      if (!id) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { data } = await api.get(
+          `/get/student/${id}`
+        );
+
+        console.log('data: ', data)
+
+        setStudent(data.student.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+
+    loadStudent();
+
+  }, []);
+
+
+  const handleInput = evt => {
+    console.log('evt target name: ', evt.target.name, evt.target.value)
+    const name = evt.target.name;
+    const newValue = evt.target.value;
+    setFormInput({ [name]: newValue });
+  };
+
+
+  const handleSubmit = async evt => {
+    evt.preventDefault();
+
+    let newData = { formInput };
+
+    if (isNew()) {
+      const data = await api.post(
+        `/create/student`,
+        newData
+      );
+      console.log('DATA CREATE Narrative', data)
+    } else {
+      const data = await api.put(
+        `/update/student`,
+        newData
+      );
+    }
   }
 
-  console.log('é um novo cadastro: ', isNew())
 
+  function isNew() {
+    return history.location.pathname.includes('new')
+  }
 
   return (
     <Container>
@@ -45,11 +110,12 @@ const FormStudent = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <Form>
+      <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome" variant="outlined" />
-          <TextField id="outlined-basic" label="Login" variant="outlined" />
-          <TextField id="outlined-basic" label="Password" variant="outlined" />
+          <TextField id="outlined-basic" label="Nome" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" label="Email" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" label="Login" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" label="Password" variant="outlined" onChange={handleInput} />
         </div>
       </Form>
     </Container>

@@ -1,44 +1,63 @@
-import { Button } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import {Actions, Title} from "../../components/globalStyleds"
+import { Button } from "@material-ui/core";
+import { Actions, Title } from "../../components/globalStyleds"
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
   useRouteMatch,
-  useHistory,
-  useLocation
+  useHistory
 } from "react-router-dom";
 import DataTable from "../../components/DataTable";
+import api from "../../services/api";
 
 const StudentList = () => {
 
-  let { path, url } = useRouteMatch();
-    
+  let { path } = useRouteMatch();
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState(null)
 
-  const columns = [
-    { id: "name", numeric: false, disablePadding: false, label: "Name" },
-    { id: "login", numeric: false, disablePadding: false, label: "Login" },
+  const headCells = [
+    {
+      id: "name",
+      numeric: false,
+      disablePadding: true,
+      label: "Nome",
+    },
+    { id: "login", disablePadding: true, label: "Descrição" },
+    { id: "email", disablePadding: true, label: "Posição" },
   ];
 
-  function createData(name, login) {
-    return { name, login };
+
+  useEffect(() => {
+
+    const loadStudents = async () => {
+      setLoading(true);
+
+      try {
+        const { data } = await api.get(
+          `/get/students/${itemsPerPage}`
+        );
+
+        console.log('data: ', data)
+
+        setStudents(data.students.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+
+    loadStudents();
+
+  }, []);
+
+  if (loading) {
+    return (
+      <div></div>
+    )
   }
-  
-  const rows = [
-    createData("Cupcake", "cup"),
-    createData("Donut", "donut"),
-    createData("Eclair", "eclair"),
-    createData("Frozen yoghurt", "frozen"),
-    createData("Gingerbread", "ginger"),
-    createData("Honeycomb", "honey"),
-  ];
 
-  function onCreateStudent(){
+  function onCreateStudent() {
     history.push(`${path}/new`)
   }
 
@@ -49,10 +68,10 @@ const StudentList = () => {
           <Title>Estudantes</Title>
         </div>
         <div>
-          <Button onClick={() => onCreateStudent()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>          
+          <Button onClick={() => onCreateStudent()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={rows} headCellsTable={columns} nameTable={"Estudantes"} />
+      <DataTable rowsTable={students} headCellsTable={headCells} nameTable={"Estudantes"} />
 
     </React.Fragment>
   );

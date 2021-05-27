@@ -15,6 +15,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import Form from "../../components/Form";
 import AddIcon from '@material-ui/icons/Add';
 import Alternative from "../../components/Alternative";
+import api from "../../services/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
     marginLeft: theme.spacing(1),
   },
-  actionAlternative:{
+  actionAlternative: {
     display: 'flex',
     justifyContent: 'flex-end'
   }
@@ -36,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
 const FormQuest = () => {
   const classes = useStyles();
   const history = useHistory();
-  
+  const [quest, setQuest] = useState(null);
+  const [narratives, setNarratives] = useState(null);
+
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
@@ -46,6 +49,57 @@ const FormQuest = () => {
       description: "",
     }
   );
+
+  useEffect(() => {
+
+    const loadNarratives = async () => {
+      setLoading(true);
+
+      try {
+        const { data } = await api.get(
+          `/get/narratives/${itemsPerPage}`
+        );
+
+        console.log('data: ', data)
+
+        setNarratives(data.narratives.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+
+    loadNarratives();
+
+  }, []);
+
+  useEffect(() => {
+
+    const loadQuest = async () => {
+      const id = isNew() ? null : match.params.id;
+      if (!id) {
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { data } = await api.get(
+          `/get/quest/${id}`
+        );
+
+        console.log('data: ', data)
+
+        setQuest(data.quest.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+
+    loadQuest();
+
+  }, []);
 
   const handleInput = evt => {
     console.log('evt target name: ', evt.target.name, evt.target.value)
@@ -68,21 +122,19 @@ const FormQuest = () => {
     let data = { formInput };
     console.log('DATA SUBMIT HANDLE: ', data)
 
-    // fetch("https://pointy-gauge.glitch.me/api/form", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    //   .then(response => response.json())
-    //   .then(response => console.log("Success:", JSON.stringify(response)))
-    //   .catch(error => console.error("Error:", error));
-  };
+    if (isNew()) {
+      const dataQuest = await api.post(
+        `/create/quest`,
+        data
+      );
 
-  
-
-  console.log("é um novo cadastro: ", isNew());
+    } else {
+      const dataUpdateQuest = await api.put(
+        `/update/quest`,
+        data
+      );
+    }
+  }
 
   return (
     <Container>
@@ -94,7 +146,7 @@ const FormQuest = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <Form handleInput={formInput} handleSubmit={handleSubmit}>
+      <Form handleSubmit={handleSubmit}>
         <div>
           <TextField
             id="outlined-basic"
@@ -144,12 +196,25 @@ const FormQuest = () => {
             required
             onChange={handleInput}
           />
+          <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label"
+            id="demo-simple-select-filled"
+            value={age}
+            onChange={handleChange}
+          >
+            <MenuItem value=""><em></em></MenuItem>
+            {narratives.map((narrative) => {
+              <MenuItem value={10}>{narrative.name}</MenuItem>
+            })
+            }
+          </Select>
         </div>
         <div className={classes.actionAlternative}>
           <Button variant="contained" color="secondary"><AddIcon />Adicionar Alternativa</Button>
         </div>
         <div>
-         <Alternative number={1}></Alternative>
+          <Alternative number={1}></Alternative>
         </div>
       </Form>
     </Container>
