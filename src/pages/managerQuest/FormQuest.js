@@ -1,21 +1,18 @@
+import React, { useState, useEffect, useReducer } from "react";
 import {
   Button,
   TextField,
-  FormControl,
   InputLabel,
-  Input,
-  FormHelperText,
-  TextareaAutosize,
 } from "@material-ui/core";
-import React, { useState, useEffect, useReducer } from "react";
 import { useHistory } from "react-router";
 import { Title, Container, Actions } from "../../components/globalStyleds";
 import { makeStyles } from "@material-ui/core/styles";
-import SaveIcon from "@material-ui/icons/Save";
 import Form from "../../components/Form";
 import AddIcon from '@material-ui/icons/Add';
 import Alternative from "../../components/Alternative";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import api from "../../services/api";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +36,7 @@ const FormQuest = () => {
   const history = useHistory();
   const [quest, setQuest] = useState(null);
   const [narratives, setNarratives] = useState(null);
+  const [currentNarrative, setCurrentNarrative] = useState(null);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -91,6 +89,7 @@ const FormQuest = () => {
         console.log('data: ', data)
 
         setQuest(data.quest.data);
+        setCurrentNarrative(data.quest.data.narrative)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -197,18 +196,20 @@ const FormQuest = () => {
             onChange={handleInput}
           />
           <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
-          <Select
-            labelId="demo-simple-select-filled-label"
-            id="demo-simple-select-filled"
-            value={age}
-            onChange={handleChange}
-          >
-            <MenuItem value=""><em></em></MenuItem>
-            {narratives.map((narrative) => {
-              <MenuItem value={10}>{narrative.name}</MenuItem>
-            })
-            }
-          </Select>
+          <Autocomplete
+            value={currentNarrative ? currentNarrative : ''}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            id="controllable-states-demo"
+            options={narratives.map((narrative) => narrative.name)}
+            style={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Controllable" variant="outlined" />}
+          />
         </div>
         <div className={classes.actionAlternative}>
           <Button variant="contained" color="secondary"><AddIcon />Adicionar Alternativa</Button>
