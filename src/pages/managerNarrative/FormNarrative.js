@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import {
   Button,
   TextField
 } from "@material-ui/core";
-import { useHistory } from "react-router";
+import { useHistory, useParams, useRouteMatch } from "react-router";
 import { Title, Container, Actions } from "../../components/globalStyleds";
 import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
@@ -25,7 +25,11 @@ const useStyles = makeStyles((theme) => ({
 const FormNarrative = () => {
   const classes = useStyles();
   const history = useHistory();
+  let { path, url } = useRouteMatch();
+  const { id } = useParams();
   const [narrative, setNarrative] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -38,8 +42,8 @@ const FormNarrative = () => {
   useEffect(() => {
 
     const loadNarrative = async () => {
-      const id = isNew() ? null : match.params.id;
-      if (!id) {
+      const idNarrative = isNew() ? null : id;
+      if (!idNarrative) {
         return;
       }
 
@@ -52,7 +56,9 @@ const FormNarrative = () => {
 
         console.log('data: ', data)
 
-        setNarrative(data.narrative.data);
+        setNarrative(data.narrative); 
+        setFormInput({ ["name"]: data.narrative.name });
+        setFormInput({ ["description"]: data.narrative.name.description });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -72,7 +78,7 @@ const FormNarrative = () => {
   }
 
   const handleInput = evt => {
-    console.log('evt target name: ', evt.target.name, evt.target.value)
+    console.log('evt target name: ', evt.target, evt.target.name, evt.target.value)
     const name = evt.target.name;
     const newValue = evt.target.value;
     setFormInput({ [name]: newValue });
@@ -82,21 +88,41 @@ const FormNarrative = () => {
   const handleSubmit = async evt => {
     evt.preventDefault();
 
-    let newData = { formInput };
+    let newData = formInput;
 
+    console.log('newData', newData)
+
+    let result = null;
     if (isNew()) {
-      const data = await api.post(
+      result = await api.post(
         `/create/narrative`,
         newData
       );
-      console.log('DATA CREATE Narrative', data)
+      console.log('DATA CREATE Narrative', result)
     } else {
-      const data = await api.put(
-        `/update/narrative`,
+      result = await api.put(
+        `/edit/narrative/${narrative.id}`,
         newData
       );
+
+      console.log('DATA UPDATE Narrative', result)
     }
+
+    if(result.data.error){
+      return
+    }
+
+    history.goBack();
   }
+
+  console.log('narrative edit: ', narrative)
+
+  if (loading) {
+    return (
+      <div></div>
+    )
+  }
+
 
   return (
     <Container>
@@ -110,15 +136,17 @@ const FormNarrative = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" label="Nome" name="name" variant="outlined" onChange={handleInput} defaultValue={narrative.name} />
         </div>
         <div>
           <TextField
             id="outlined-multiline-static"
             label="Descrição"
             multiline
+            name="description"
             rows={5}
             variant="outlined"
+            defaultValue={narrative.description}
             onChange={handleInput}
           />
         </div>

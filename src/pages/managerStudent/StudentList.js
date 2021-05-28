@@ -14,6 +14,7 @@ const StudentList = () => {
   let { path } = useRouteMatch();
   const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [students, setStudents] = useState(null)
 
   const headCells = [

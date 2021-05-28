@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import {
   Button,
   TextField,
 } from "@material-ui/core";
-import { useHistory } from "react-router";
 import { Title, Container, Actions } from "../../components/globalStyleds";
 import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import api from "../../services/api";
+import { useHistory, useParams } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
 const FormMaterial = () => {
   const classes = useStyles();
   const history = useHistory();
+  const { id } = useParams();
   const [material, setMaterial] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -38,7 +41,7 @@ const FormMaterial = () => {
   useEffect(() => {
 
     const loadMaterial = async () => {
-      const id = isNew() ? null : match.params.id;
+      const id = isNew() ? null : id;
       if (!id) {
         return;
       }
@@ -79,7 +82,7 @@ const FormMaterial = () => {
     return history.location.pathname.includes("new");
   }
 
-  const handleSubmit = evt => {
+  const handleSubmit = async evt => {
     evt.preventDefault();
 
     let data = { formInput };

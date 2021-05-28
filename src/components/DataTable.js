@@ -23,6 +23,10 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import DatatableHead from "./DatatableHead";
 import DatatableToolbar from "./DatatableToolbar";
 import { DataGrid } from "@material-ui/data-grid";
+import { EditButton } from "./styled";
+import EditIcon from '@material-ui/icons/Edit';
+import { Button } from "@material-ui/core";
+import { useHistory, useRouteMatch } from "react-router";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -89,6 +93,8 @@ export default function EnhancedTable({
   const [rows, setRows] = useState(rowsTable);
   const [headCells, setHeadCells] = useState(headCellsTable);
   const [nameEntity, setNameEntity] = useState(nameTable);
+  const history = useHistory();
+  let { path, url } = useRouteMatch();
 
   console.log("headcells datatable: ", rows, headCells);
 
@@ -137,8 +143,14 @@ export default function EnhancedTable({
   };
 
   const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+    setDense(event.target);
   };
+
+  const handleClickEdit = async (event) => {
+    console.log('edit target event', event.currentTarget.value);
+    const idEntity = event.currentTarget.value;
+    history.push(`${path}/edit/${idEntity}`);
+  }
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -175,11 +187,11 @@ export default function EnhancedTable({
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  console.log('row row row:', row);
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      // onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -188,6 +200,7 @@ export default function EnhancedTable({
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
+                          onClick={(event) => handleClick(event, row.name)}
                           checked={isItemSelected}
                           inputProps={{ "aria-labelledby": labelId }}
                         />
@@ -201,6 +214,10 @@ export default function EnhancedTable({
                           {row[attribute.id]}
                         </TableCell>
                       ))}
+                      <TableCell padding="actions">
+                          <Button key={`edit-${row.id}`} value={row.id} onClick={(evt) => handleClickEdit(evt)}><EditIcon /></Button>
+                      </TableCell>
+
                     </TableRow>
                   );
                 })}

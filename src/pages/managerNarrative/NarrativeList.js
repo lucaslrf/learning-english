@@ -58,7 +58,7 @@ const NarrativeList = () => {
     )
   }
 
-  console.log('NARRATIVES: ', narratives, rows)
+  console.log('NARRATIVES: ', narratives)
 
   function onCreateNarrative() {
     history.push(`${path}/new`)

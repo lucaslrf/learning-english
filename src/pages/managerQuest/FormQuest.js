@@ -4,13 +4,14 @@ import {
   TextField,
   InputLabel,
 } from "@material-ui/core";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Title, Container, Actions } from "../../components/globalStyleds";
 import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import AddIcon from '@material-ui/icons/Add';
 import Alternative from "../../components/Alternative";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import api from "../../services/api";
 
 
@@ -34,9 +35,14 @@ const useStyles = makeStyles((theme) => ({
 const FormQuest = () => {
   const classes = useStyles();
   const history = useHistory();
+  const { id } = useParams();
   const [quest, setQuest] = useState(null);
   const [narratives, setNarratives] = useState(null);
+  const [valueNarrative, setValueNarrative] = useState(null);
   const [currentNarrative, setCurrentNarrative] = useState(null);
+  const [inputValueNarrative, setInputValueNarrative] = useState('');
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -74,8 +80,8 @@ const FormQuest = () => {
   useEffect(() => {
 
     const loadQuest = async () => {
-      const id = isNew() ? null : match.params.id;
-      if (!id) {
+      const idQuest = isNew() ? null : id;
+      if (!idQuest) {
         return;
       }
 
@@ -115,7 +121,7 @@ const FormQuest = () => {
     return history.location.pathname.includes("new");
   }
 
-  const handleSubmit = evt => {
+  const handleSubmit = async evt => {
     evt.preventDefault();
 
     let data = { formInput };
@@ -195,15 +201,15 @@ const FormQuest = () => {
             required
             onChange={handleInput}
           />
-          <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
+          <InputLabel id="demo-simple-select-filled-label">Narrativa</InputLabel>
           <Autocomplete
             value={currentNarrative ? currentNarrative : ''}
             onChange={(event, newValue) => {
-              setValue(newValue);
+              setValueNarrative(newValue);
             }}
-            inputValue={inputValue}
+            inputValue={inputValueNarrative}
             onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
+              setInputValueNarrative(newInputValue);
             }}
             id="controllable-states-demo"
             options={narratives.map((narrative) => narrative.name)}

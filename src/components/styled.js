@@ -18,3 +18,9 @@ export const FooterActions = styled.div`
 export const HeaderActions = styled.div`
   display: flex;
 `;
+
+export const EditButton = styled.button`
+  margin-left: 10px;
+  border: none;
+  background: transparent;
+`;

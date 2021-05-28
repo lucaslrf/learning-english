@@ -15,6 +15,7 @@ const QuestList = () => {
   let { path } = useRouteMatch();
   const [loading, setLoading] = useState(true);
   const [quests, setQuests] = useState(null)
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const history = useHistory();
 

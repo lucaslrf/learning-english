@@ -12,9 +12,10 @@ import api from "../../services/api";
 
 const MaterialList = () => {
 
-  let { path } = useRouteMatch();
+  let { path, match } = useRouteMatch();
   const [loading, setLoading] = useState(true);
   const [materials, setMaterials] = useState(null)
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const history = useHistory();
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { Button, TextField } from "@material-ui/core";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { Title, Container, Actions } from "../../components/globalStyleds"
 import { makeStyles } from '@material-ui/core/styles';
 import Form from '../../components/Form';
@@ -23,7 +23,10 @@ const FormStudent = () => {
 
   const classes = useStyles();
   const history = useHistory();
+  const { id } = useParams();
   const [student, setStudent] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [loading, setLoading] = useState(true);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -42,7 +45,7 @@ const FormStudent = () => {
   useEffect(() => {
 
     const loadStudent = async () => {
-      const id = isNew() ? null : match.params.id;
+      const id = isNew() ? null : id;
       if (!id) {
         return;
       }

@@ -17,6 +17,7 @@ const TeacherList = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState(null)
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const headCells = [
     {
@@ -71,7 +72,7 @@ const TeacherList = () => {
           <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </ContainerButton>
       </Actions>
-      <DataTable rowsTable={tecahers} headCellsTable={headCells} nameTable={"Professores"} />
+      <DataTable rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
     </React.Fragment>
   );
 };
