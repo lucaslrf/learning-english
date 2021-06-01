@@ -195,7 +195,7 @@ export default function EnhancedTable({
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={`${row.name}-${index}`}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -210,11 +210,12 @@ export default function EnhancedTable({
                           id={`${labelId}-${attribute}-${index}`}
                           scope="row"
                           padding="none"
+                          key={`${labelId}-${attribute}-${index}`}
                         >
                           {row[attribute.id]}
                         </TableCell>
                       ))}
-                      <TableCell padding="actions">
+                      <TableCell padding="none">
                           <Button key={`edit-${row.id}`} value={row.id} onClick={(evt) => handleClickEdit(evt)}><EditIcon /></Button>
                       </TableCell>
 

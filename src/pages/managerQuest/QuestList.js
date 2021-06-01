@@ -26,10 +26,10 @@ const QuestList = () => {
       disablePadding: true,
       label: "Nome",
     },
-    { id: "description", disablePadding: true, label: "Descrição" },
-    { id: "position", disablePadding: true, label: "Posição" },
-    { id: "question", disablePadding: true, label: "Questão" },
-    { id: "score", numeric: true.valueOf, disablePadding: true, label: "Pontos" }
+    { id: "description", disablePadding: false, label: "Descrição" },
+    { id: "position", numeric: true, disablePadding: false, label: "Posição" },
+    { id: "question", disablePadding: false, label: "Questão" },
+    { id: "score", numeric:true, disablePadding: false, label: "Pontos" }
   ];
 
   function onCreateQuest() {
@@ -40,14 +40,13 @@ const QuestList = () => {
   useEffect(() => {
 
     const loadQuests = async () => {
-      setLoading(true);
 
       try {
         const { data } = await api.get(
           `/get/quests/${itemsPerPage}`
         );
 
-        console.log('data: ', data)
+        console.log('data get Quest: ', data)
 
         setQuests(data.quests.data);
         setLoading(false);

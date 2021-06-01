@@ -51,6 +51,7 @@ const FormQuest = () => {
       position: "",
       score: "",
       description: "",
+      narrative: ""
     }
   );
 
@@ -61,10 +62,10 @@ const FormQuest = () => {
 
       try {
         const { data } = await api.get(
-          `/get/narratives/${itemsPerPage}`
+          `/get/narratives/30`
         );
 
-        console.log('data: ', data)
+        console.log('data form quests narratives: ', data)
 
         setNarratives(data.narratives.data);
         setLoading(false);
@@ -127,18 +128,32 @@ const FormQuest = () => {
     let data = { formInput };
     console.log('DATA SUBMIT HANDLE: ', data)
 
-    if (isNew()) {
-      const dataQuest = await api.post(
-        `/create/quest`,
-        data
-      );
+    // if (isNew()) {
+    //   const dataQuest = await api.post(
+    //     `/create/quest`,
+    //     data
+    //   );
 
-    } else {
-      const dataUpdateQuest = await api.put(
-        `/update/quest`,
-        data
-      );
-    }
+    // } else {
+    //   const dataUpdateQuest = await api.put(
+    //     `/edit/quest/${id}`,
+    //     data
+    //   );
+    // }
+
+    // if(result.data.error){
+    //   return
+    // }
+
+    // history.goBack();
+  }
+
+  console.log('narratives form quest: ', narratives)
+
+  if (loading || !narratives) {
+    return (
+      <div></div>
+    )
   }
 
   return (
@@ -201,7 +216,6 @@ const FormQuest = () => {
             required
             onChange={handleInput}
           />
-          <InputLabel id="demo-simple-select-filled-label">Narrativa</InputLabel>
           <Autocomplete
             value={currentNarrative ? currentNarrative : ''}
             onChange={(event, newValue) => {
@@ -214,7 +228,7 @@ const FormQuest = () => {
             id="controllable-states-demo"
             options={narratives.map((narrative) => narrative.name)}
             style={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Controllable" variant="outlined" />}
+            renderInput={(params) => <TextField {...params} label="Narrativa" variant="outlined" />}
           />
         </div>
         <div className={classes.actionAlternative}>
