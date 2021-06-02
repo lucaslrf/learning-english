@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import green from '@material-ui/core/colors/green';
 
-const Alternative = ({ number }) => {
+const Alternative = ({ number, handleChange }) => {
 
   const colorCheck = green.A400;
 
@@ -26,6 +26,7 @@ const Alternative = ({ number }) => {
         rows={1}
         variant="outlined"
         required
+        onChange={(evt) => handleChange(number, evt)}
       />
       <FormControlLabel
       style={{marginLeft: '5px'}}

@@ -43,6 +43,7 @@ const FormQuest = () => {
   const [inputValueNarrative, setInputValueNarrative] = useState('');
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
+  const [alternativesAdded, setAlternativesAdded] = useState([{"id": 1, "description": ""}])
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -50,8 +51,7 @@ const FormQuest = () => {
       name: "",
       position: "",
       score: "",
-      description: "",
-      narrative: ""
+      description: ""
     }
   );
 
@@ -125,8 +125,15 @@ const FormQuest = () => {
   const handleSubmit = async evt => {
     evt.preventDefault();
 
-    let data = { formInput };
-    console.log('DATA SUBMIT HANDLE: ', data)
+    let newData = formInput;
+    let dataAlternatives = alternativesAdded;
+
+    newData.narrative_id = valueNarrative.id;
+
+    newData.alternatives = dataAlternatives;
+
+    
+    console.log('DATA SUBMIT HANDLE: ', newData)
 
     // if (isNew()) {
     //   const dataQuest = await api.post(
@@ -148,7 +155,26 @@ const FormQuest = () => {
     // history.goBack();
   }
 
-  console.log('narratives form quest: ', narratives)
+  function addAlternative(){
+    const number = alternativesAdded.length + 1;
+    const alternative = {
+      "id": number,
+      "description": ""
+    }
+    setAlternativesAdded(prev => [...prev, alternative]);
+  }
+
+  function onChangeAlternatives(id, evt){
+    let alternative = alternativesAdded.find((item) => item.id === id)
+    if(alternative){
+      alternative.description = evt.target.value;
+      const newAlternatives = alternativesAdded;
+      setAlternativesAdded(newAlternatives);
+    }
+    
+  }
+
+  console.log('narratives form quest: ', narratives, alternativesAdded)
 
   if (loading || !narratives) {
     return (
@@ -217,25 +243,30 @@ const FormQuest = () => {
             onChange={handleInput}
           />
           <Autocomplete
-            value={currentNarrative ? currentNarrative : ''}
+            // value={currentNarrative ? currentNarrative : ''}
             onChange={(event, newValue) => {
               setValueNarrative(newValue);
+              console.log('nw value: ', event, newValue)
             }}
             inputValue={inputValueNarrative}
             onInputChange={(event, newInputValue) => {
               setInputValueNarrative(newInputValue);
             }}
             id="controllable-states-demo"
-            options={narratives.map((narrative) => narrative.name)}
+            // options={narratives.map((narrative) => narrative.name)}
+            options={narratives}
+            getOptionLabel={(option) => option.name}
             style={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Narrativa" variant="outlined" />}
+            renderInput={(params) => <TextField {...params} label="Narrativa" variant="outlined" name="narrative"/>}
           />
         </div>
         <div className={classes.actionAlternative}>
-          <Button variant="contained" color="secondary"><AddIcon />Adicionar Alternativa</Button>
+          <Button variant="contained" color="secondary" onClick={() => addAlternative()}><AddIcon />Adicionar Alternativa</Button>
         </div>
         <div>
-          <Alternative number={1}></Alternative>
+          {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 
+            <Alternative number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives}></Alternative>
+          )}
         </div>
       </Form>
     </Container>
