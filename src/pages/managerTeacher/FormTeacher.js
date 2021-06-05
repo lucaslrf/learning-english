@@ -72,7 +72,6 @@ const FormTeacher = () => {
   }, []);
 
   const handleInput = evt => {
-    console.log('evt target name: ', evt.target.name, evt.target.value)
     const name = evt.target.name;
     const newValue = evt.target.value;
     setFormInput({ [name]: newValue });
@@ -82,20 +81,29 @@ const FormTeacher = () => {
   const handleSubmit = async evt => {
     evt.preventDefault();
 
-    let newData = { formInput };
+    let newData = formInput;
 
+    console.log('newData register teacher: ', newData)
+
+    let result = null;
     if (isNew()) {
-      const data = await api.post(
-        `/create/teacher`,
+      result = await api.post(
+        `/register/teacher`,
         newData
       );
-      console.log('DATA CREATE Narrative', data)
+      console.log('DATA CREATE Narrative', newData)
     } else {
-      const data = await api.put(
-        `/update/teacher`,
+      result = await api.put(
+        `/edit/teacher/${id}`,
         newData
       );
     }
+
+    if(result.data.error){
+      return
+    }
+
+    history.goBack();
   }
 
   function isNew() {
@@ -115,10 +123,10 @@ const FormTeacher = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome do professor" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Email" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Login do professor" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Password do professor" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="name" label="Nome do professor" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="email" label="Email" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="login" label="Login do professor" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="password" label="Password do professor" variant="outlined" onChange={handleInput} />
         </div>
       </Form>
     </Container>
