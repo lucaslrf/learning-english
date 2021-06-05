@@ -5,7 +5,7 @@ import { dataRPG } from "../../services/dados";
 import api from "../../services/api";
 
 const Challenge = () => {
-  const [challenges, setChallenges] = useState([]);
+  const [challenges, setChallenges] = useState(dataRPG);
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [narratives, setNarratives] = useState(null);
@@ -38,7 +38,7 @@ const Challenge = () => {
   return (
     <React.Fragment>
       <Title>Narrativas</Title>
-      {narratives.map((item, index) => (
+      {challenges.map((item, index) => (
         <div key={`${index}-${item._id}`}>
           <Card item={item}></Card>
         </div>

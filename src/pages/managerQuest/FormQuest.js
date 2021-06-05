@@ -43,7 +43,7 @@ const FormQuest = () => {
   const [inputValueNarrative, setInputValueNarrative] = useState('');
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
-  const [alternativesAdded, setAlternativesAdded] = useState([{"id": 1, "description": ""}])
+  const [alternativesAdded, setAlternativesAdded] = useState([{"id": 1, "description": "", "correct": false}])
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -135,31 +135,33 @@ const FormQuest = () => {
     
     console.log('DATA SUBMIT HANDLE: ', newData)
 
-    // if (isNew()) {
-    //   const dataQuest = await api.post(
-    //     `/create/quest`,
-    //     data
-    //   );
+    let result = null;
+    if (isNew()) {
+      result = await api.post(
+        `/create/quest`,
+        newData
+      );
 
-    // } else {
-    //   const dataUpdateQuest = await api.put(
-    //     `/edit/quest/${id}`,
-    //     data
-    //   );
-    // }
+    } else {
+      result = await api.put(
+        `/edit/quest/${id}`,
+        newData
+      );
+    }
 
-    // if(result.data.error){
-    //   return
-    // }
+    if(result.data.error){
+      return
+    }
 
-    // history.goBack();
+    history.goBack();
   }
 
   function addAlternative(){
     const number = alternativesAdded.length + 1;
     const alternative = {
       "id": number,
-      "description": ""
+      "description": "",
+      "correct": false
     }
     setAlternativesAdded(prev => [...prev, alternative]);
   }
@@ -168,6 +170,16 @@ const FormQuest = () => {
     let alternative = alternativesAdded.find((item) => item.id === id)
     if(alternative){
       alternative.description = evt.target.value;
+      const newAlternatives = alternativesAdded;
+      setAlternativesAdded(newAlternatives);
+    }
+    
+  }
+
+  function onChangeCheckboxAlternative(id, evt){
+    let alternative = alternativesAdded.find((item) => item.id === id)
+    if(alternative){
+      alternative.correct = evt.target.checked;
       const newAlternatives = alternativesAdded;
       setAlternativesAdded(newAlternatives);
     }
@@ -265,7 +277,7 @@ const FormQuest = () => {
         </div>
         <div>
           {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 
-            <Alternative number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives}></Alternative>
+            <Alternative number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
         </div>
       </Form>

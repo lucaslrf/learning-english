@@ -43,7 +43,9 @@ const FormNarrative = () => {
 
     const loadNarrative = async () => {
       const idNarrative = isNew() ? null : id;
+      console.log('edit narratiie: ', idNarrative)
       if (!idNarrative) {
+        setLoading(false)
         return;
       }
 
@@ -78,7 +80,6 @@ const FormNarrative = () => {
   }
 
   const handleInput = evt => {
-    console.log('evt target name: ', evt.target, evt.target.name, evt.target.value)
     const name = evt.target.name;
     const newValue = evt.target.value;
     setFormInput({ [name]: newValue });
@@ -136,18 +137,27 @@ const FormNarrative = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome" name="name" variant="outlined" onChange={handleInput} defaultValue={narrative.name} />
+          <TextField 
+            id="outlined-basic" 
+            label="Nome" 
+            name="name" 
+            variant="outlined" 
+            onChange={handleInput} 
+            defaultValue={isNew() ? '' : narrative.name} 
+            style={{ width: "100%" }}/>
         </div>
         <div>
           <TextField
             id="outlined-multiline-static"
             label="Descrição"
-            multiline
             name="description"
+            style={{ width: "100%" }}
+            multiline
             rows={5}
             variant="outlined"
-            defaultValue={narrative.description}
+            defaultValue={isNew() ? '' : narrative.description}
             onChange={handleInput}
+            required
           />
         </div>
       </Form>
