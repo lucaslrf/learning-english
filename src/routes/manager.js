@@ -53,7 +53,7 @@ export default function Manager({ children, ...rest }) {
       </Route>
       <Route path={`${path}/teachers/edit/:id`}>
         <Paperbase categories={categories}>
-          <TeacherList />
+          <FormTeacher />
         </Paperbase>
       </Route>
       <Route exact path={`${path}/students`}>
@@ -62,6 +62,11 @@ export default function Manager({ children, ...rest }) {
         </Paperbase>
       </Route>
       <Route exact path={`${path}/students/new`}>
+        <Paperbase categories={categories}>
+          <FormStudent />
+        </Paperbase>
+      </Route>
+      <Route path={`${path}/students/edit/:id`}>
         <Paperbase categories={categories}>
           <FormStudent />
         </Paperbase>

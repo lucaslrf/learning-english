@@ -32,7 +32,6 @@ const FormStudent = () => {
     (state, newState) => ({ ...state, ...newState }),
     {
       name: "",
-      login: "",
       email: "",
       password: "",
     }
@@ -45,8 +44,8 @@ const FormStudent = () => {
   useEffect(() => {
 
     const loadStudent = async () => {
-      const id = isNew() ? null : id;
-      if (!id) {
+      const idStudent = isNew() ? null : id;
+      if (!idStudent) {
         return;
       }
 
@@ -59,7 +58,9 @@ const FormStudent = () => {
 
         console.log('data: ', data)
 
-        setStudent(data.student.data);
+        setStudent(data.student);
+        setFormInput({ ["name"]: data.student.name });
+        setFormInput({ ["email"]: data.student.email });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -82,25 +83,39 @@ const FormStudent = () => {
   const handleSubmit = async evt => {
     evt.preventDefault();
 
-    let newData = { formInput };
+    let newData = formInput;
 
+    let result = null;
     if (isNew()) {
-      const data = await api.post(
+      result = await api.post(
         `/create/student`,
         newData
       );
-      console.log('DATA CREATE Narrative', data)
+      console.log('DATA CREATE Narrative', result)
     } else {
-      const data = await api.put(
-        `/update/student`,
+      result = await api.put(
+        `/edit/student/${id}`,
         newData
       );
     }
-  }
 
+    console.log('result Student EDIT: ', result)
+
+    if(result.data.error){
+      return
+    }
+
+    history.goBack();
+  }
 
   function isNew() {
     return history.location.pathname.includes('new')
+  }
+
+  if(loading){
+    return (
+      <div></div>
+    )
   }
 
   return (
@@ -115,10 +130,29 @@ const FormStudent = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Email" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Login" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" label="Password" variant="outlined" onChange={handleInput} />
+        <TextField 
+            id="outlined-basic" 
+            name="name" 
+            label="Nome do aluno" 
+            variant="outlined" 
+            defaultValue={isNew() ? '' : student.name}
+            onChange={handleInput} 
+          />
+          <TextField 
+            id="outlined-basic" 
+            name="email" 
+            label="Email" 
+            variant="outlined" 
+            defaultValue={isNew() ? '' : student.email}
+            onChange={handleInput} 
+          />
+          <TextField 
+            id="outlined-basic" 
+            name="password" 
+            label="Password do aluno" 
+            variant="outlined" 
+            onChange={handleInput} 
+          />
         </div>
       </Form>
     </Container>

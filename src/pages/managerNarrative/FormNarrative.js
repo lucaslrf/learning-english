@@ -60,7 +60,7 @@ const FormNarrative = () => {
 
         setNarrative(data.narrative); 
         setFormInput({ ["name"]: data.narrative.name });
-        setFormInput({ ["description"]: data.narrative.name.description });
+        setFormInput({ ["description"]: data.narrative.description });
         setLoading(false);
       } catch (error) {
         setLoading(false);

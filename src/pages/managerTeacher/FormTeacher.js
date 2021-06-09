@@ -33,7 +33,6 @@ const FormTeacher = () => {
     (state, newState) => ({ ...state, ...newState }),
     {
       name: "",
-      login: "",
       email: "",
       password: "",
     }
@@ -46,8 +45,8 @@ const FormTeacher = () => {
   useEffect(() => {
 
     const loadTeacher = async () => {
-      const id = isNew() ? null : id;
-      if (!id) {
+      const idTeacher = isNew() ? null : id;
+      if (!idTeacher) {
         return;
       }
 
@@ -58,9 +57,11 @@ const FormTeacher = () => {
           `/get/teacher/${id}`
         );
 
-        console.log('data: ', data)
+        console.log('data TEACHER FORM: ', data.teacher)
 
-        setTeacher(data.teacher.data);
+        setTeacher(data.teacher);
+        setFormInput({ ["name"]: data.teacher.name });
+        setFormInput({ ["email"]: data.teacher.email });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -99,6 +100,8 @@ const FormTeacher = () => {
       );
     }
 
+    console.log('result Teacher EDIT: ', result)
+
     if(result.data.error){
       return
     }
@@ -110,6 +113,11 @@ const FormTeacher = () => {
     return history.location.pathname.includes('new')
   }
 
+  if(loading){
+    return (
+      <div></div>
+    )
+  }
 
   return (
     <Container>
@@ -123,10 +131,29 @@ const FormTeacher = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" name="name" label="Nome do professor" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" name="email" label="Email" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" name="login" label="Login do professor" variant="outlined" onChange={handleInput} />
-          <TextField id="outlined-basic" name="password" label="Password do professor" variant="outlined" onChange={handleInput} />
+          <TextField 
+            id="outlined-basic" 
+            name="name" 
+            label="Nome do professor" 
+            variant="outlined" 
+            defaultValue={isNew() ? '' : teacher.name}
+            onChange={handleInput} 
+          />
+          <TextField 
+            id="outlined-basic" 
+            name="email" 
+            label="Email" 
+            variant="outlined" 
+            defaultValue={isNew() ? '' : teacher.email}
+            onChange={handleInput} 
+          />
+          <TextField 
+            id="outlined-basic" 
+            name="password" 
+            label="Password do professor" 
+            variant="outlined" 
+            onChange={handleInput} 
+          />
         </div>
       </Form>
     </Container>
