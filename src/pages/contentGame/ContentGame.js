@@ -8,6 +8,7 @@ import {
   useLocation
 } from "react-router-dom";
 import ActionsHeader from "../../components/ActionsHeader";
+import { Actions } from "../../components/globalStyleds";
 
 
 const ContentGame = () => {
@@ -21,14 +22,33 @@ const ContentGame = () => {
   function onContinue() {
     console.log('teste Card', pathCurrent.state)
 
+     //verificar status da narrativa
+      /**
+       * if (narrativa.status === "INICIADA"){
+       *      setPositionQuest(0)
+       * }else if(narrativa.status === "RECOMECADA"){
+       *      sverificar na tabela SAVES
+       * pegar idquest -> pegar quest e position da quest
+       *      const data = questPesquisada
+       *       setPositionQuest(data.position)
+       * }
+       * 
+       */
+      //idNarrativa, possitionQuest
     history.push(`${path}/quest`, pathCurrent.state)
+  }
+
+  function onBack() {
+    history.goBack();
   }
 
   return (
     <React.Fragment>
-
-      <ActionsHeader />
-
+      <Actions>
+        <div>
+          <Button onClick={() => onBack()}>Voltar</Button>
+        </div>
+      </Actions>
       <Content>
         <Title>
           {pathCurrent.state.name}

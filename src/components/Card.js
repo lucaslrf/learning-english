@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,6 +12,8 @@ import {
   useRouteMatch,
   useHistory
 } from "react-router-dom";
+import api from "../services/api";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,10 +58,28 @@ export default function MediaControlCard({ item }) {
   const classes = useStyles();
   const theme = useTheme();
   let { path, url } = useRouteMatch();
+  const [loading, setLoading] = useState(true);
 
   const history = useHistory();
 
-  function onPlay() {
+  async function onPlay() {
+    console.log('item narrative init: ', item)
+
+    let result = null;
+    if(item){
+      result = await api.post(
+        `initialize/narrative/${item.id}`,  
+      );
+    }
+
+    console.log('RESULT INIT NARRATIVE: ', result)
+
+    if(!result || result.data.error){
+      return
+    }
+
+    item.info = result.data.info;
+
     history.push(`${path}/contentGame`, item)
   }
 

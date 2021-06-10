@@ -7,7 +7,7 @@ import api from "../../services/api";
 const Challenge = () => {
   const [challenges, setChallenges] = useState(dataRPG);
   const [loading, setLoading] = useState(true);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [narratives, setNarratives] = useState(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Challenge = () => {
           `/get/narratives/${itemsPerPage}`
         );
 
-        console.log('data: ', data)
+        console.log('data challenges: ', data.narratives)
 
         setNarratives(data.narratives.data);
         setLoading(false);
@@ -31,14 +31,14 @@ const Challenge = () => {
     loadNarratives();
   }, []);
 
-  if (loading) {
+  if (loading || !narratives) {
     return <></>;
   }
 
   return (
     <React.Fragment>
       <Title>Narrativas</Title>
-      {challenges.map((item, index) => (
+      {narratives.map((item, index) => (
         <div key={`${index}-${item._id}`}>
           <Card item={item}></Card>
         </div>
