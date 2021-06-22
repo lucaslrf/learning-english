@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import ActionsHeader from "../../components/ActionsHeader";
 import { Actions } from "../../components/globalStyleds";
+import api from "../../services/api";
 
 
 const ContentGame = () => {
@@ -16,26 +17,30 @@ const ContentGame = () => {
   let { path } = useRouteMatch();
   const pathCurrent = useLocation()
   let history = useHistory();
+  const [quest, setQuest] = useState([]);
+  const [positionQuest, setPositionQuest] = useState(0)
+  const narrative = pathCurrent.state;
+  const [narrativeQuest, setNarrativeQuest] = useState(null)
 
-  console.log('pathCurrent', pathCurrent.state)
+  console.log('narrative contentGame', narrative, narrative.info.status)
 
-  function onContinue() {
+  async function onContinue() {
     console.log('teste Card', pathCurrent.state)
 
      //verificar status da narrativa
-      /**
-       * if (narrativa.status === "INICIADA"){
-       *      setPositionQuest(0)
-       * }else if(narrativa.status === "RECOMECADA"){
-       *      sverificar na tabela SAVES
-       * pegar idquest -> pegar quest e position da quest
-       *      const data = questPesquisada
-       *       setPositionQuest(data.position)
-       * }
-       * 
-       */
-      //idNarrativa, possitionQuest
-    history.push(`${path}/quest`, pathCurrent.state)
+      let result = null;
+      result = await api.get(
+        `/get/narrative/next/quest/${narrative.id}`
+      );
+
+      if(!result || result.data.error){
+        return false;
+      }
+        
+       
+      console.log('positionQuest ContentGame with result: ', result, positionQuest)
+      
+    history.push(`${path}/quest`, result.data.narrative_quest)
   }
 
   function onBack() {

@@ -24,3 +24,8 @@ export const EditButton = styled.button`
   border: none;
   background: transparent;
 `;
+
+export const ContentAlternative = styled.div`
+  display: flex;
+  align-items: center;
+` ;

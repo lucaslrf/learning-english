@@ -22,54 +22,48 @@ import {
     useParams
   } from "react-router-dom";
 import ActionsHeader from "../../components/ActionsHeader";
+import AlternativesQuests from "./AlternativesQuests";
+import api from "../../services/api";
 
 
 const Quest = () => {
 
+    const pathCurrent = useLocation()
+    const data = pathCurrent.state;
     let { path, url } = useRouteMatch();
-    const [quest, setQuest] = useState([]);
+    const [quest, setQuest] = useState(data.quest);
     const [positionQuest, setPositionQuest] = useState(0)
     let history = useHistory();
-    const pathCurrent = useLocation()
-
-    console.log('pathCurrent quest: ', pathCurrent.state.quests)
-
-    useEffect(() => {
-
-        const loadQuestion = async () => {
-            //verificar status da narrativa
-            /**
-             * if (narrativa.status === "INICIADA"){
-             *      setPositionQuest(0)
-             * }else if(narrativa.status === "RECOMECADA"){
-             *      sverificar na tabela SAVES
-             * pegar idquest -> pegar quest e position da quest
-             *      const data = questPesquisada
-             *       setPositionQuest(data.position)
-             * }
-             * 
-             */
-            //idNarrativa, possitionQuest
-            console.log('pathCurrent.state.quests[positionQuest]: ', pathCurrent.state.quests[positionQuest])
-            if(pathCurrent.state.quests[positionQuest]){
-              setQuest(pathCurrent.state.quests[positionQuest])
-              console.log('quest  nova: ', quest)
-            }else{
-              history.push(`${path}/finished`)
-            }
-
-        }
-
-        loadQuestion()
-
-    }, [positionQuest])
-
     
-    function onNext(){
-        console.log('onNext')
-        let newPosition = positionQuest
-        setPositionQuest(++newPosition)
+    const [valueAlternativeChecked, setValueAlternativeChecked] = useState(data.alternatives.length ? data.alternatives[0].id : null);
+
+    console.log('pathCurrent quest: ', pathCurrent.state)
+
+    const handleChange = (event) => {
+      console.log('handleChange: ', event.target.value)
+      setValueAlternativeChecked(event.target.value);
+    };
+    
+    async function onNext(){
+        console.log('onNext');
+        let result = null;
+        if (valueAlternativeChecked) {
+          result = await api.post(
+            `register/point/quest/${quest.id}/${valueAlternativeChecked}/${quest.narrative_id}`,
+          );
+          console.log('DATA CREATE Narrative', result)
+        }
     }
+
+    if(!quest){
+      return (
+        <div>
+
+        </div>
+      )
+    }
+
+    console.log('quest content game: ', quest, data)
 
   return (
     <React.Fragment>
@@ -78,13 +72,17 @@ const Quest = () => {
 
       <Content>
         <Title>
-            {quest.name}
+            {quest.name_quest}
           </Title>
           <Typography component="p" variant="body1">
-            {quest.description}
+            {quest.description_quest}
           </Typography>
+          <br />
+          <Typography component="p" variant="body1">
+            {quest.question}
+          </Typography>
+          <AlternativesQuests alternativesQuest={data.alternatives} handleChange={handleChange} valueAlternativeRadio={valueAlternativeChecked} />
       </Content>
-       
        <FooterActions>
             <Button onClick={() => onNext()}>Next</Button>
        </FooterActions>
