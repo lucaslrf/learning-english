@@ -53,6 +53,22 @@ const Quest = () => {
           );
           console.log('DATA CREATE Narrative', result)
         }
+
+        
+      if(!result || result.data.error){
+        return false;
+      }
+
+      console.log(result.data.next_narrative_quest.original.narrative_quest);
+      if(result.data.next_narrative_quest.original.narrative_quest){
+        console.log('history finished: ', history)
+        history.location.pathname = "/";
+        history.replace(`${path}/quest`, result.data.next_narrative_quest.original.narrative_quest)
+      }
+
+      history.location.pathname = "/";
+      history.replace('student/challenges/quest/finished')
+        
     }
 
     if(!quest){

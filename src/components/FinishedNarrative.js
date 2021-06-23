@@ -29,7 +29,7 @@ const FinishedNarrative = () => {
     let history = useHistory();
     
     function onHome(){  
-        console.log('history finished: ', history)
+      console.log('history finished: ', history)
       history.location.pathname = "/"
       history.replace("student/")
     }
@@ -41,7 +41,7 @@ const FinishedNarrative = () => {
 
       <Content>
         <Title>
-                Narrativa Finalizada!
+            Narrativa Finalizada!
           </Title>
           <Typography component="h6" variant="h6">
             Parabéns, você concluiu a narrativa com sucesso e ganhou pontos de acordo com o que acertou.

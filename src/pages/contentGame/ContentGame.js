@@ -36,7 +36,6 @@ const ContentGame = () => {
       if(!result || result.data.error){
         return false;
       }
-        
        
       console.log('positionQuest ContentGame with result: ', result, positionQuest)
       

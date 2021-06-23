@@ -52,7 +52,7 @@ export default function Student({ children, ...rest }) {
           <Quest />
         </Paperbase>
       </Route>
-      <Route exact path={`${path}/challenges/contentGame/quest/finished`}>
+      <Route exact path={`${path}/challenges/quest/finished`}>
         <Paperbase categories={categories}>
           <FinishedNarrative />
         </Paperbase>
