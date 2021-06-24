@@ -35,6 +35,10 @@ const AlternativesQuests = ({ alternativesQuest, handleChange, valueAlternativeR
 
   console.log("pathCurrent alternative quest: ", alternatives, valueAlternativeRadio);
 
+  useEffect(() => {
+    setAlternatives(alternativesQuest);
+  }, [alternativesQuest])
+
   return (
     <React.Fragment>
       

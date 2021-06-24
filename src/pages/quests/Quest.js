@@ -43,6 +43,11 @@ const Quest = () => {
       console.log('handleChange: ', event.target.value)
       setValueAlternativeChecked(event.target.value);
     };
+
+    useEffect(() => {
+      const data = pathCurrent.state;
+      setQuest(data.quest);
+    }, [pathCurrent.state]);
     
     async function onNext(){
         console.log('onNext');
@@ -63,11 +68,11 @@ const Quest = () => {
       if(result.data.next_narrative_quest.original.narrative_quest){
         console.log('history finished: ', history)
         history.location.pathname = "/";
-        history.replace(`${path}/quest`, result.data.next_narrative_quest.original.narrative_quest)
-      }
-
-      history.location.pathname = "/";
-      history.replace('student/challenges/quest/finished')
+        history.replace(`${path}`, result.data.next_narrative_quest.original.narrative_quest)
+      }else{
+        history.location.pathname = "/";
+        history.replace('student/challenges/quest/finished')
+      } 
         
     }
 
