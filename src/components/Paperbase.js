@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,6 +8,13 @@ import Link from '@material-ui/core/Link';
 import Navigator from './Navigator';
 import Content from './Content';
 import Header from './Header';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import clsx from 'clsx';
 
 function Copyright() {
   return (
@@ -165,21 +172,32 @@ function Paperbase(props) {
   const { classes } = props;
   const { children } = props;
 console.log('children: ', children)
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   console.log('props base Paperbase: ', props)
+
+  const [open, setOpen] = useState(true);
+
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+  };
+
+  const handleDrawerClose = () => {
+    console.log('openOrNot: ', open)
+    setOpen(!open);
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} >
       <div className={classes.root}>
         <CssBaseline />
-        <nav className={classes.drawer}>
+        <nav className={classes.drawer} style={{display: !open ? 'none' : 'block' }}>
           <Hidden smUp implementation="js">
             <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
+              PaperProps={{ style: { width: drawerWidth} }}
               variant="temporary"
               open={mobileOpen}
               categories={props.categories}
@@ -187,11 +205,11 @@ console.log('children: ', children)
             />
           </Hidden>
           <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} categories={props.categories} />
+            <Navigator PaperProps={{ style: { width: drawerWidth, display: !open ? 'none' : 'block' } }} categories={props.categories} setopen={handleDrawerClose} />
           </Hidden>
         </nav>
         <div className={classes.app}>
-          <Header onDrawerToggle={handleDrawerToggle} />
+          <Header onDrawerToggle={handleDrawerToggle} openMenu={handleDrawerOpen} />
           <main className={classes.main}>
             <Content children={children} />
           </main>

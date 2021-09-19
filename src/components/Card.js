@@ -98,7 +98,7 @@ export default function MediaControlCard({ item }) {
           </Typography>
         </CardContent>
         <div className={classes.controls}>
-          {item.status !== "FINISHED" ?
+          {item.status !== "FINALIZADA" ?
             <Button onClick={() => { onPlay(item.id) }} aria-label="play/pause">
               <PlayArrowIcon className={classes.playIcon} />
               <Typography variant="subtitle1" color="textSecondary">

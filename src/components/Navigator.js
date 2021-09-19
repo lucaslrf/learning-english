@@ -22,18 +22,15 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import Filter9PlusIcon from '@material-ui/icons/Filter9Plus';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Link, useLocation } from 'react-router-dom';
-
-// const categories = [
-//   {
-//     id: '',
-//     children: [
-//       { id: 'Início', icon: <HomeIcon />, path: '/'  },
-//       { id: 'Narrativas', icon: <AirplanemodeActiveIcon />, path: 'student/challenges'  },
-//       { id: 'Materiais', icon: <ListAltIcon />,  path: '/materials'  }
-//     ],
-//   }
-// ];
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = (theme) => ({
   categoryHeader: {
@@ -42,6 +39,9 @@ const styles = (theme) => ({
   },
   categoryHeaderPrimary: {
     color: theme.palette.common.white,
+  },
+  iconArrowMenu:{
+    color: '#fff'
   },
   item: {
     paddingTop: 1,
@@ -90,15 +90,50 @@ function Navigator(props) {
 
   const { classes, ...other } = props;
   const pathCurrent = useLocation()
+  const [open, setOpen] = useState(true);
   const [categories, setCategories] = useState(props.categories)
-
-  console.log('propsteste navigator: ',props)
-
+  
+  console.log('propsNavigator: ', props)
 
   console.log('Navigator: ', pathCurrent)
 
   return (
-    <Drawer variant="permanent" {...other}>
+
+    <>
+     {/* <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Persistent drawer
+          </Typography>
+        </Toolbar>
+      </AppBar> */}
+
+    <Drawer  variant="persistent"
+    anchor="left"
+    open={true}
+    {...other}
+    >
+        <div className={clsx(classes.drawerHeader)}>
+          <IconButton style={{color: 'white'}} onClick={props.setopen}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
       <List disablePadding>
         <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
           TripQuest
@@ -153,6 +188,7 @@ function Navigator(props) {
         ))}
       </List>
     </Drawer>
+    </>
   );
 }
 

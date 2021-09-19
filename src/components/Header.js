@@ -24,6 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthService from '../services/auth';
+import clsx from 'clsx';
 import {
   useHistory
 } from "react-router-dom";
@@ -107,7 +108,7 @@ function Header(props) {
 
     prevOpen.current = open;
   }, [open]);
-  const { classes, onDrawerToggle } = props;
+  const { classes, onDrawerToggle, openMenu } = props;
 
   return (
     <React.Fragment>
@@ -150,12 +151,23 @@ function Header(props) {
         elevation={0}
       >
         <Toolbar>
+        <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={openMenu}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
                 Seja bem vindo ao TripQuest
               </Typography>
             </Grid>
+
+            
             {/* <Grid item>
               <Button className={classes.button} variant="outlined" color="inherit" size="small">
                 Web setup
@@ -209,6 +221,7 @@ function Header(props) {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
   onDrawerToggle: PropTypes.func.isRequired,
+  openMenu: PropTypes.func,
 };
 
 export default withStyles(styles)(Header);
