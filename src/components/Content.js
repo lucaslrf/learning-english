@@ -5,13 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import RefreshIcon from '@material-ui/icons/Refresh';
 
 const styles = (theme) => ({
   paper: {
@@ -23,7 +17,8 @@ const styles = (theme) => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
   },
   searchInput: {
-    fontSize: theme.typography.fontSize,
+    fontSize: 20,
+    textAlign: 'center'
   },
   block: {
     display: 'block',
@@ -34,6 +29,9 @@ const styles = (theme) => ({
   contentWrapper: {
     margin: '40px 16px',
   },
+  textHomeDescription: {
+    fontSize: 18,
+  }
 });
 
 function Content(props) {
@@ -72,7 +70,13 @@ function Content(props) {
         </Toolbar>
       </AppBar>
       <div className={classes.contentWrapper}>
-        {children ? children : 'HOME'}
+        {
+        children ? children : 
+          <div>
+            <p className={classes.searchInput} >Seja bem vindo ao TripQuest</p>
+            <p className={classes.textHomeDescription}>Acesse o menu narrativas e comece a viver uma nova experiência com o inglês</p>
+          </div>
+          }
         <Typography color="textSecondary" align="center">
         </Typography>
       </div>

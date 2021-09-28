@@ -137,10 +137,13 @@ function Header(props) {
             </Grid> */}
             <Grid item>
               <IconButton ref={anchorRef} onClick={handleToggle} color="inherit" className={classes.iconButtonAvatar}>
-                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+                <Avatar alt="My Avatar" />
               </IconButton>
             </Grid>
-          </Grid>
+            <Grid item>
+              <p>4000 pontos</p>
+            </Grid>
+          </Grid>          
         </Toolbar>
       </AppBar>
       <AppBar
@@ -206,7 +209,6 @@ function Header(props) {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                    <MenuItem onClick={handleClose}>My points</MenuItem>
                     <MenuItem onClick={handleLogoutClose}>Logout</MenuItem>
                   </MenuList>
                 </ClickAwayListener>

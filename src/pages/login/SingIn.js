@@ -3,10 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -14,15 +11,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,  
-  Redirect,
   useHistory,
-  useLocation
 } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import AuthService from "../../services/auth";
 import api from "../../services/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function Copyright() {
   return (
@@ -55,6 +49,13 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: 18,
+    marginLeft: -12,
+  },
 }));
 
 export default function SignIn() {
@@ -66,9 +67,11 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingEnter, setLoadingEnter] = useState(false);
 
   async function onSubmit(e){
     e.preventDefault();
+    
     if (!email || !senha) {
       return enqueueSnackbar("Por favor, preencha todos os campos!", {
         variant: "warning",
@@ -76,6 +79,7 @@ export default function SignIn() {
     }
 
     setLoading(true);
+    setLoadingEnter(true);
     try {
       const { data } = await api.post("login", {
         email: email,
@@ -85,6 +89,7 @@ export default function SignIn() {
       AuthService.setToken(data.token);
 
       setLoading(false);
+      setLoadingEnter(false);
 
       const tipoUsuario = await AuthService.getTipoUsuario();
       console.log('TIPO USUARIO: ', tipoUsuario)
@@ -92,6 +97,7 @@ export default function SignIn() {
       history.push(`/${tipoUsuario.toLowerCase()}`);
     } catch (error) {
       setLoading(false);
+      setLoadingEnter(false);
       if (error?.response?.data?.mensagem) {
         return enqueueSnackbar(error?.response?.data?.mensagem, {
           variant: "error",
@@ -147,23 +153,13 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={loadingEnter}
             className={classes.submit}
             onClick={(e) => onSubmit(e)}
           >
             Entrar
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Esqueci a senha?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Não tem uma conta? Cadastre-se"}
-              </Link>
-            </Grid>
-          </Grid>
+          {loadingEnter && <CircularProgress size={24} className={classes.buttonProgress} />}
         </form>
       </div>
       <Box mt={8}>
