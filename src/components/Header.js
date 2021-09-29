@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
@@ -24,6 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthService from '../services/auth';
+import api from "../services/api";
 import clsx from 'clsx';
 import {
   useHistory
@@ -65,8 +66,9 @@ const useStyles = makeStyles((theme) => ({
 function Header(props) {
 
   const classesMain = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const [myPoints, setMyPoints] = useState(null);
+  const anchorRef = useRef(null);
   const history = useHistory();
 
   const handleToggle = () => {
@@ -99,8 +101,26 @@ function Header(props) {
     }
   }
 
+  useEffect(() => {
+    const getMyPoints = async () => {  
+        let result = null;
+        result = await api.get(
+          `/points`
+        );
+  
+        if(!result || result.data.error){
+          return false;
+        }
+         
+        console.log('My points: ', result.data.amount)
+        setMyPoints(result.data.amount)
+    }
+
+    getMyPoints()
+  }, [])
+
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
+  const prevOpen = useRef(open);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
@@ -140,9 +160,9 @@ function Header(props) {
                 <Avatar alt="My Avatar" />
               </IconButton>
             </Grid>
-            <Grid item>
-              <p>4000 pontos</p>
-            </Grid>
+            {myPoints && <Grid item>
+              <p>{myPoints} pontos</p>
+            </Grid>}
           </Grid>          
         </Toolbar>
       </AppBar>
