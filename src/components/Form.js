@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Form = ({ children, handleSubmit }) => {
+const Form = ({ children, handleSubmit, loading = false }) => {
   const classes = useStyles();
 
   return (
@@ -39,6 +39,7 @@ const Form = ({ children, handleSubmit }) => {
             size="medium"
             className={classes.button}
             startIcon={<SaveIcon />}
+            disabled={loading}
             type="submit"
           >
             Save

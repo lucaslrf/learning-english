@@ -8,10 +8,18 @@ import {
 } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import api from "../../services/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+  buttonProgress: {
+    textAlign: 'center',
+    marginLeft: '50%'
+  },
+}));
 
 const NarrativeList = () => {
-
+  const classes = useStyles();
   let { path } = useRouteMatch();
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -52,10 +60,8 @@ const NarrativeList = () => {
 
   }, []);
 
-  if (loading) {
-    return (
-      <div></div>
-    )
+  if (loading || !narratives) {
+    return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
   console.log('NARRATIVES: ', narratives)

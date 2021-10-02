@@ -11,8 +11,8 @@ import Form from "../../components/Form";
 import AddIcon from '@material-ui/icons/Add';
 import Alternative from "../../components/Alternative";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
 import api from "../../services/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,11 @@ const useStyles = makeStyles((theme) => ({
   actionAlternative: {
     display: 'flex',
     justifyContent: 'flex-end'
-  }
+  },
+  buttonProgress: {
+    textAlign: 'center',
+    marginLeft: '50%'
+  },
 }));
 
 const FormQuest = () => {
@@ -123,6 +127,7 @@ const FormQuest = () => {
   }
 
   const handleSubmit = async evt => {
+    setLoading(true);
     evt.preventDefault();
 
     let newData = formInput;
@@ -154,6 +159,7 @@ const FormQuest = () => {
     }
 
     history.goBack();
+    setLoading(false);
   }
 
   function addAlternative(){
@@ -189,9 +195,7 @@ const FormQuest = () => {
   console.log('narratives form quest: ', narratives, alternativesAdded)
 
   if (loading || !narratives) {
-    return (
-      <div></div>
-    )
+    return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
   return (
@@ -204,7 +208,7 @@ const FormQuest = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <Form handleSubmit={handleSubmit}>
+      <Form loading={loading} handleSubmit={handleSubmit}>
         <div>
           <TextField
             id="outlined-basic"
@@ -273,7 +277,7 @@ const FormQuest = () => {
           />
         </div>
         <div className={classes.actionAlternative}>
-          <Button variant="contained" color="secondary" onClick={() => addAlternative()}><AddIcon />Adicionar Alternativa</Button>
+          <Button disabled={loading} variant="contained" color="secondary" onClick={() => addAlternative()}><AddIcon />Adicionar Alternativa</Button>
         </div>
         <div>
           {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 

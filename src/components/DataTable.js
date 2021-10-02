@@ -154,8 +154,7 @@ export default function EnhancedTable({
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows?.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -179,7 +178,7 @@ export default function EnhancedTable({
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rows?.length}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
