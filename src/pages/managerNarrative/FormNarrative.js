@@ -143,7 +143,7 @@ const FormNarrative = () => {
             name="name" 
             variant="outlined" 
             onChange={handleInput} 
-            defaultValue={isNew() ? '' : narrative.name} 
+            defaultValue={isNew() ? '' : narrative?.name} 
             style={{ width: "100%" }}/>
         </div>
         <div>
@@ -155,7 +155,7 @@ const FormNarrative = () => {
             multiline
             rows={5}
             variant="outlined"
-            defaultValue={isNew() ? '' : narrative.description}
+            defaultValue={isNew() ? '' : narrative?.description}
             onChange={handleInput}
             required
           />
