@@ -74,7 +74,7 @@ function Content(props) {
         children ? children : 
           <div>
             <p className={classes.searchInput} >Seja bem vindo ao TripQuest</p>
-            <p className={classes.textHomeDescription}>Acesse o menu narrativas e comece a viver uma nova experiência com o inglês</p>
+            <p className={classes.textHomeDescription}></p>
           </div>
           }
         <Typography color="textSecondary" align="center">
