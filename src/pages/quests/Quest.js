@@ -6,6 +6,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import {
     BrowserRouter as Router,
     Switch,
@@ -39,6 +44,9 @@ const Quest = () => {
     const [quest, setQuest] = useState(data.quest);
     const [loading, setLoading] = useState(false);
     const [positionQuest, setPositionQuest] = useState(0)
+    const [openDialog, setOpenDialog] = useState(false);
+    const [showAlternativesCorrect, setShowAlternativeCorrect] = useState([])
+    const [alternativeIncorrect, setAlternativeIncorrect] = useState(false)
     let history = useHistory();
     
     const [valueAlternativeChecked, setValueAlternativeChecked] = useState(data.alternatives.length ? data.alternatives[0].id : null);
@@ -81,6 +89,12 @@ const Quest = () => {
         history.location.pathname = "/";
         history.replace('student/challenges/quest/finished')
       } 
+
+      if(!result.data.alternative_correct){
+          setAlternativeIncorrect(true)
+          setOpenDialog(true)
+          setShowAlternativeCorrect(result.data.alternatives_corrects);
+      }
         
     }
 
@@ -89,6 +103,14 @@ const Quest = () => {
     }
 
     console.log('quest content game: ', quest, data)
+
+    const handleClickOpen = () => {
+      setOpenDialog(true);
+    };
+  
+    const handleClose = () => {
+      setOpenDialog(false);
+    };
 
   return (
     <React.Fragment>
@@ -111,6 +133,28 @@ const Quest = () => {
        <FooterActions>
             <Button onClick={() => onNext()}>Next</Button>
        </FooterActions>
+
+       <Dialog
+        open={openDialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{alternativeIncorrect ? 'Ops, você errou, mas continue estudando para melhorar' : 'Muito bem, conseguiu acertar'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {!!showAlternativesCorrect.length && showAlternativesCorrect.map((alternative) => (
+              <p key={alternative.id}>{alternative.description}</p>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Prosseguir
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </React.Fragment>
   );
 };
