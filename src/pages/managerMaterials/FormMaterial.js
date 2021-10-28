@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import api from "../../services/api";
 import { useHistory, useParams } from 'react-router-dom'
+import FileUpload from '../../components/FileUpload';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +36,7 @@ const FormMaterial = () => {
     {
       name: "",
       description: "",
+      image: "",
     }
   );
 
@@ -73,6 +75,13 @@ const FormMaterial = () => {
     setFormInput({ [name]: newValue });
   };
 
+  const handleInputFile = evt => {
+    console.log('evt target name file: ', evt.target.name, evt.target.files[0])
+    const name = evt.target.name;
+    const newValue = evt.target.files[0];
+    setFormInput({ [name]: newValue });
+  };
+
 
   function onBack() {
     history.goBack();
@@ -86,18 +95,32 @@ const FormMaterial = () => {
     evt.preventDefault();
 
     let data = { formInput };
-    console.log('DATA SUBMIT HANDLE: ', data)
+    console.log('DATA SUBMIT HANDLE: ', data.formInput)
+
+    const formData = new FormData();
+    formData.append('name', data.formInput.name)
+    formData.append('description', data.formInput.description)
+    formData.append('materialImage', data.formInput.image)
+    console.log('DATA SUBMIT HANDLE 2: ', formData)
+
+    const config = {
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
+    }
 
     if (isNew()) {
       const dataMaterial = await api.post(
-        `/create/materials`,
-        data
+        `/create/material`,
+        formData,
+        config
       );
 
     } else {
       const dataUpdateMaterial = await api.put(
         `/update/material`,
-        data
+        formData,
+        config
       );
     }
   }
@@ -114,17 +137,22 @@ const FormMaterial = () => {
       </Actions>
       <Form handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" label="Nome" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="name" label="Nome" variant="outlined" onChange={handleInput} />
         </div>
         <div>
           <TextField
             id="outlined-multiline-static"
             label="Descrição"
+            name="description"
             multiline
             rows={5}
             variant="outlined"
             onChange={handleInput}
           />
+        </div>
+        <div>
+          <h1>Adicionar Arquivo</h1>
+          <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
     </Container>
