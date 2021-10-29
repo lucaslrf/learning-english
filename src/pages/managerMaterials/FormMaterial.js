@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import api from "../../services/api";
 import { useHistory, useParams } from 'react-router-dom'
-import FileUpload from '../../components/FileUpload';
 
 const useStyles = makeStyles((theme) => ({
   root: {
