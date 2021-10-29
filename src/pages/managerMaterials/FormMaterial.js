@@ -29,7 +29,7 @@ const FormMaterial = () => {
   const { id } = useParams();
   const [material, setMaterial] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -92,6 +92,7 @@ const FormMaterial = () => {
   }
 
   const handleSubmit = async evt => {
+    setLoading(true);
     evt.preventDefault();
 
     let data = { formInput };
@@ -109,20 +110,28 @@ const FormMaterial = () => {
       }
     }
 
+    let result = null;
     if (isNew()) {
-      const dataMaterial = await api.post(
+      result = await api.post(
         `/create/material`,
         formData,
         config
       );
 
     } else {
-      const dataUpdateMaterial = await api.put(
+      result = await api.put(
         `/update/material`,
         formData,
         config
       );
     }
+
+    if(result.data.error){
+      return
+    }
+
+    history.goBack();
+    setLoading(false);
   }
 
   return (
@@ -135,15 +144,16 @@ const FormMaterial = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <Form handleSubmit={handleSubmit}>
+      <Form loading={loading} handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" name="name" label="Nome" variant="outlined" onChange={handleInput} />
+          <TextField id="outlined-basic" name="name" label="Nome" variant="outlined" style={{ width: "100%" }} onChange={handleInput} />
         </div>
         <div>
           <TextField
             id="outlined-multiline-static"
             label="Descrição"
             name="description"
+            style={{ width: "100%" }}
             multiline
             rows={5}
             variant="outlined"

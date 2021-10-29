@@ -82,6 +82,8 @@ export default function EnhancedTable({
   rowsTable,
   headCellsTable,
   nameTable,
+  itemsPerPage = null,
+  setItemsPerPage = null
 }) {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -89,7 +91,7 @@ export default function EnhancedTable({
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage ? itemsPerPage : 5);
   const [rows, setRows] = useState(rowsTable);
   const [headCells, setHeadCells] = useState(headCellsTable);
   const [nameEntity, setNameEntity] = useState(nameTable);
@@ -139,6 +141,9 @@ export default function EnhancedTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
+    if(setItemsPerPage){
+      setItemsPerPage(parseInt(event.target.value, 10));
+    }
     setPage(0);
   };
 
@@ -230,6 +235,7 @@ export default function EnhancedTable({
           </Table>
         </TableContainer>
         <TablePagination
+          labelRowsPerPage={"Linhas por página"}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}

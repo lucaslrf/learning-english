@@ -55,7 +55,8 @@ const FormQuest = () => {
       name: "",
       position: "",
       score: "",
-      description: ""
+      description: "",
+      image: "",
     }
   );
 
@@ -118,6 +119,13 @@ const FormQuest = () => {
     setFormInput({ [name]: newValue });
   };
 
+  const handleInputFile = evt => {
+    console.log('evt target name file: ', evt.target.name, evt.target.files[0])
+    const name = evt.target.name;
+    const newValue = evt.target.files[0];
+    setFormInput({ [name]: newValue });
+  };
+
   function onBack() {
     history.goBack();
   }
@@ -137,6 +145,29 @@ const FormQuest = () => {
 
     newData.alternatives = dataAlternatives;
 
+
+    // name: "",
+    //   position: "",
+    //   score: "",
+    //   description: "",
+    //   image: "",
+
+    const formData = new FormData();
+    formData.append('name', newData.name)
+    formData.append('position', newData.position)
+    formData.append('score', newData.score)
+    formData.append('narrative_id', newData.narrative_id)
+    formData.append('alternatives', newData.alternatives)
+    formData.append('description', newData.description)
+    formData.append('imageNarrative',newData.image)
+    console.log('DATA SUBMIT HANDLE 2: ', formData)
+
+    const config = {
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
+    }
+
     
     console.log('DATA SUBMIT HANDLE: ', newData)
 
@@ -144,13 +175,15 @@ const FormQuest = () => {
     if (isNew()) {
       result = await api.post(
         `/create/quest`,
-        newData
+        formData,
+        config
       );
 
     } else {
       result = await api.put(
         `/edit/quest/${id}`,
-        newData
+        formData,
+        config
       );
     }
 
@@ -283,6 +316,10 @@ const FormQuest = () => {
           {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 
             <Alternative number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
+        </div>
+        <div>
+          <h1>Adicionar Arquivo</h1>
+          <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
     </Container>

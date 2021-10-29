@@ -80,7 +80,7 @@ const NarrativeList = () => {
           <Button onClick={() => onCreateNarrative()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
+      <DataTable itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
     </React.Fragment>
   );
 };

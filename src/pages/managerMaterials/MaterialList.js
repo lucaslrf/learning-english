@@ -8,10 +8,19 @@ import {
 } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import api from "../../services/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  buttonProgress: {
+    textAlign: 'center',
+    marginLeft: '50%'
+  },
+}));
 
 
 const MaterialList = () => {
-
+  const classes = useStyles();
   let { path, match } = useRouteMatch();
   const [loading, setLoading] = useState(true);
   const [materials, setMaterials] = useState(null)
@@ -51,12 +60,10 @@ const MaterialList = () => {
 
     loadMaterials();
 
-  }, []);
+  }, [itemsPerPage]);
 
   if (loading) {
-    return (
-      <div></div>
-    )
+    return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
 
@@ -75,7 +82,7 @@ const MaterialList = () => {
           <Button onClick={() => onCreateMaterial()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={materials} headCellsTable={headCells} nameTable={"Materiais"} />
+      <DataTable itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={materials} headCellsTable={headCells} nameTable={"Materiais"} />
     </React.Fragment>
   );
 };

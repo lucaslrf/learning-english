@@ -82,7 +82,7 @@ const QuestList = () => {
           <Button onClick={() => onCreateQuest()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={quests} headCellsTable={headCells} nameTable={"Quests"} />
+      <DataTable  itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={quests} headCellsTable={headCells} nameTable={"Quests"} />
     </React.Fragment>
   );
 };
