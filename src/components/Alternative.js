@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import green from '@material-ui/core/colors/green';
 
-const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative }) => {
+const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,description = null }) => {
 
   const colorCheck = green.A400;
 
@@ -26,6 +26,7 @@ const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative }) 
         rows={1}
         variant="outlined"
         required
+        defaultValue={description ? description : ''}
         onChange={(evt) => handleChange(number, evt)}
       />
       <FormControlLabel

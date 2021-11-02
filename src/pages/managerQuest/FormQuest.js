@@ -87,6 +87,9 @@ const FormQuest = () => {
 
     const loadQuest = async () => {
       const idQuest = isNew() ? null : id;
+
+      console.log('edit quest: ', idQuest)
+      
       if (!idQuest) {
         return;
       }
@@ -98,10 +101,16 @@ const FormQuest = () => {
           `/get/quest/${id}`
         );
 
-        console.log('data: ', data)
+        console.log('data quest edit: ', data)
 
-        setQuest(data.quest.data);
-        setCurrentNarrative(data.quest.data.narrative)
+        setQuest(data.quest);
+        setCurrentNarrative(data.narrative)
+        setValueNarrative(data.narrative)
+        setAlternativesAdded(data.alternatives)
+        setFormInput({ 'name': data.quest.name });
+        setFormInput({ 'description': data.quest.description });
+        setFormInput({ 'position': data.quest.position });
+        setFormInput({ 'score': data.quest.score });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -145,13 +154,8 @@ const FormQuest = () => {
 
     newData.alternatives = dataAlternatives;
 
-
-    // name: "",
-    //   position: "",
-    //   score: "",
-    //   description: "",
-    //   image: "",
-
+    console.log('newDataFormaInputQuest: ', newData)
+    
     const formData = new FormData();
     formData.append('name', newData.name)
     formData.append('position', newData.position)
@@ -191,8 +195,8 @@ const FormQuest = () => {
       return
     }
 
-    history.goBack();
     setLoading(false);
+    history.goBack();
   }
 
   function addAlternative(){
@@ -249,6 +253,7 @@ const FormQuest = () => {
             label="Nome"
             variant="outlined"
             required
+            defaultValue={isNew() ? '' : quest?.name}
             onChange={handleInput}
           />
           <TextField
@@ -257,6 +262,7 @@ const FormQuest = () => {
             label="Posição"
             variant="outlined"
             required
+            defaultValue={isNew() ? '' : quest?.position}
             onChange={handleInput}
           />
           <TextField
@@ -265,6 +271,7 @@ const FormQuest = () => {
             label="Pontos"
             variant="outlined"
             required
+            defaultValue={isNew() ? '' : quest?.score}
             onChange={handleInput}
           />
         </div>
@@ -278,6 +285,7 @@ const FormQuest = () => {
             rows={5}
             variant="outlined"
             required
+            defaultValue={isNew() ? '' : quest?.description}
             onChange={handleInput}
           />
           <TextField
@@ -289,10 +297,10 @@ const FormQuest = () => {
             rows={5}
             variant="outlined"
             required
+            defaultValue={isNew() ? '' : quest?.question}
             onChange={handleInput}
           />
           <Autocomplete
-            // value={currentNarrative ? currentNarrative : ''}
             onChange={(event, newValue) => {
               setValueNarrative(newValue);
               console.log('nw value: ', event, newValue)
@@ -306,6 +314,7 @@ const FormQuest = () => {
             options={narratives}
             getOptionLabel={(option) => option.name}
             style={{ width: 300 }}
+            defaultValue={{id: currentNarrative?.id, name: currentNarrative?.name}}
             renderInput={(params) => <TextField {...params} label="Narrativa" variant="outlined" name="narrative"/>}
           />
         </div>
@@ -314,7 +323,7 @@ const FormQuest = () => {
         </div>
         <div>
           {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 
-            <Alternative number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
+            <Alternative description={alternative.description} number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
         </div>
         <div>
