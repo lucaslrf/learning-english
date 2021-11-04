@@ -36,6 +36,7 @@ const FormNarrative = () => {
     {
       name: "",
       description: "",
+      image: "",
     }
   );
 
@@ -85,6 +86,13 @@ const FormNarrative = () => {
     setFormInput({ [name]: newValue });
   };
 
+  const handleInputFile = evt => {
+    console.log('evt target name file: ', evt.target.name, evt.target.files[0])
+    const name = evt.target.name;
+    const newValue = evt.target.files[0];
+    setFormInput({ [name]: newValue });
+  };
+
 
   const handleSubmit = async evt => {
     evt.preventDefault();
@@ -93,17 +101,31 @@ const FormNarrative = () => {
 
     console.log('newData', newData)
 
+    const formData = new FormData();
+    formData.append('name', newData.name)
+    formData.append('description', newData.description)
+    formData.append('imageNarrative', newData.image)
+    console.log('DATA SUBMIT HANDLE 2: ', formData)
+
+    const config = {
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
+    }
+
     let result = null;
     if (isNew()) {
       result = await api.post(
         `/create/narrative`,
-        newData
+        formData,
+        config
       );
       console.log('DATA CREATE Narrative', result)
     } else {
-      result = await api.put(
+      result = await api.post(
         `/edit/narrative/${narrative.id}`,
-        newData
+        formData,
+        config
       );
 
       console.log('DATA UPDATE Narrative', result)
@@ -118,7 +140,7 @@ const FormNarrative = () => {
 
   console.log('narrative edit: ', narrative)
 
-  if (loading) {
+  if (loading && !narrative) {
     return (
       <div></div>
     )
@@ -159,6 +181,10 @@ const FormNarrative = () => {
             onChange={handleInput}
             required
           />
+        </div>
+        <div>
+          <h1>Adicionar Arquivo</h1>
+          <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
     </Container>

@@ -163,7 +163,7 @@ const FormQuest = () => {
     formData.append('narrative_id', newData.narrative_id)
     formData.append('alternatives', newData.alternatives)
     formData.append('description', newData.description)
-    formData.append('imageNarrative',newData.image)
+    formData.append('imageQuest', newData.image)
     console.log('DATA SUBMIT HANDLE 2: ', formData)
 
     const config = {
@@ -184,7 +184,7 @@ const FormQuest = () => {
       );
 
     } else {
-      result = await api.put(
+      result = await api.post(
         `/edit/quest/${id}`,
         formData,
         config

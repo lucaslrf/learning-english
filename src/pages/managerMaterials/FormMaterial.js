@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import api from "../../services/api";
 import { useHistory, useParams } from 'react-router-dom'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
     marginLeft: theme.spacing(1),
   },
+  buttonProgress: {
+    textAlign: 'center',
+    marginLeft: '50%'
+  }
 }));
 
 const FormMaterial = () => {
@@ -42,8 +47,8 @@ const FormMaterial = () => {
   useEffect(() => {
 
     const loadMaterial = async () => {
-      const id = isNew() ? null : id;
-      if (!id) {
+      const idMaterial = isNew() ? null : id;
+      if (!idMaterial) {
         return;
       }
 
@@ -56,7 +61,9 @@ const FormMaterial = () => {
 
         console.log('data: ', data)
 
-        setMaterial(data.material.data);
+        setMaterial(data.material);
+        setFormInput({ 'name': data.material.name });
+        setFormInput({ 'description': data.material.description });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -118,8 +125,8 @@ const FormMaterial = () => {
       );
 
     } else {
-      result = await api.put(
-        `/update/material`,
+      result = await api.post(
+        `/edit/material/${id}`,
         formData,
         config
       );
@@ -131,6 +138,12 @@ const FormMaterial = () => {
 
     history.goBack();
     setLoading(false);
+  }
+
+  console.log('material: ', material)
+
+  if(loading || !material){
+    return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
   return (
@@ -145,7 +158,15 @@ const FormMaterial = () => {
       </Actions>
       <Form loading={loading} handleSubmit={handleSubmit}>
         <div>
-          <TextField id="outlined-basic" name="name" label="Nome" variant="outlined" style={{ width: "100%" }} onChange={handleInput} />
+          <TextField 
+            id="outlined-basic" 
+            name="name" 
+            label="Nome" 
+            variant="outlined" 
+            style={{ width: "100%" }} 
+            onChange={handleInput} 
+            defaultValue={isNew() ? '' : material?.name} 
+          />
         </div>
         <div>
           <TextField
@@ -156,6 +177,7 @@ const FormMaterial = () => {
             multiline
             rows={5}
             variant="outlined"
+            defaultValue={isNew() ? '' : material?.description}
             onChange={handleInput}
           />
         </div>

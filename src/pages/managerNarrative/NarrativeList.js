@@ -58,7 +58,7 @@ const NarrativeList = () => {
 
     loadNarratives();
 
-  }, []);
+  }, [itemsPerPage]);
 
   if (loading || !narratives) {
     return <CircularProgress size={24} className={classes.buttonProgress} />

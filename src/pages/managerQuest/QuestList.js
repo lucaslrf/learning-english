@@ -66,7 +66,7 @@ const QuestList = () => {
 
     loadQuests();
 
-  }, []);
+  }, [itemsPerPage]);
 
   if (loading) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
