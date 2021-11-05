@@ -181,6 +181,9 @@ const FormMaterial = () => {
             onChange={handleInput}
           />
         </div>
+        {material?.path ? <div>
+          <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${material?.path}`}>Imagem Anexada</a>
+        </div> :<></>}
         <div>
           <h1>Adicionar Arquivo</h1>
           <input type="file" name="image" onChange={handleInputFile}/>    

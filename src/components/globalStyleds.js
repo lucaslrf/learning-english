@@ -11,4 +11,10 @@ export const Actions = styled.div`
 
 export const Container = styled.div`
   margin: 20px;
+
+  img{
+    height: 50px;
+    width: 50px;
+  }
+
 `;

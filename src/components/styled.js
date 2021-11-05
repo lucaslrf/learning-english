@@ -29,3 +29,4 @@ export const ContentAlternative = styled.div`
   display: flex;
   align-items: center;
 ` ;
+

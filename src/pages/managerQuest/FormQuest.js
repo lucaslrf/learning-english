@@ -326,6 +326,9 @@ const FormQuest = () => {
             <Alternative description={alternative.description} number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
         </div>
+        {quest?.path_image ? <div>
+          <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${quest?.path_image}`}>Imagem Anexada</a>
+        </div> :<></>}
         <div>
           <h1>Adicionar Arquivo</h1>
           <input type="file" name="image" onChange={handleInputFile}/>    
