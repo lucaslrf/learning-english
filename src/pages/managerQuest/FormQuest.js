@@ -55,6 +55,7 @@ const FormQuest = () => {
       name: "",
       position: "",
       score: "",
+      question: "",
       description: "",
       image: "",
     }
@@ -111,6 +112,7 @@ const FormQuest = () => {
         setFormInput({ 'description': data.quest.description });
         setFormInput({ 'position': data.quest.position });
         setFormInput({ 'score': data.quest.score });
+        setFormInput({ 'question': data.quest.question });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -161,8 +163,9 @@ const FormQuest = () => {
     formData.append('position', newData.position)
     formData.append('score', newData.score)
     formData.append('narrative_id', newData.narrative_id)
-    formData.append('alternatives', newData.alternatives)
+    formData.append('alternatives', JSON.stringify(newData.alternatives))
     formData.append('description', newData.description)
+    formData.append('question', newData.question)
     formData.append('imageQuest', newData.image)
     console.log('DATA SUBMIT HANDLE 2: ', formData)
 
@@ -200,7 +203,7 @@ const FormQuest = () => {
   }
 
   function addAlternative(){
-    const number = alternativesAdded.length + 1;
+    const number = alternativesAdded?.length + 1;
     const alternative = {
       "id": number,
       "description": "",
@@ -231,7 +234,7 @@ const FormQuest = () => {
 
   console.log('narratives form quest: ', narratives, alternativesAdded)
 
-  if (loading || !narratives) {
+  if (loading || !quest) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
@@ -311,7 +314,7 @@ const FormQuest = () => {
             }}
             id="controllable-states-demo"
             // options={narratives.map((narrative) => narrative.name)}
-            options={narratives}
+            options={narratives ? narratives : []}
             getOptionLabel={(option) => option.name}
             style={{ width: 300 }}
             defaultValue={{id: currentNarrative?.id, name: currentNarrative?.name}}
@@ -322,7 +325,7 @@ const FormQuest = () => {
           <Button disabled={loading} variant="contained" color="secondary" onClick={() => addAlternative()}><AddIcon />Adicionar Alternativa</Button>
         </div>
         <div>
-          {alternativesAdded && alternativesAdded.length && alternativesAdded.map((alternative, index) => 
+          {alternativesAdded && alternativesAdded?.length && alternativesAdded.map((alternative, index) => 
             <Alternative description={alternative.description} number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
         </div>
