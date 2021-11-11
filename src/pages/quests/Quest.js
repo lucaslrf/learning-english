@@ -81,7 +81,17 @@ const Quest = () => {
       }
 
       console.log(result.data.next_narrative_quest.original.narrative_quest);
+
+      console.log('resulDataCorrect: ', result.data)
+
+      if(!result.data.alternative_correct){
+        setAlternativeIncorrect(true)
+        setOpenDialog(true)
+        setShowAlternativeCorrect(result.data.alternatives_corrects);
+    }
+
       if(result.data.next_narrative_quest.original.narrative_quest){
+        setOpenDialog(true)
         console.log('history finished: ', history)
         history.location.pathname = "/";
         history.replace(`${path}`, result.data.next_narrative_quest.original.narrative_quest)
@@ -89,12 +99,6 @@ const Quest = () => {
         history.location.pathname = "/";
         history.replace('student/challenges/quest/finished')
       } 
-
-      if(!result.data.alternative_correct){
-          setAlternativeIncorrect(true)
-          setOpenDialog(true)
-          setShowAlternativeCorrect(result.data.alternatives_corrects);
-      }
         
     }
 
@@ -143,6 +147,7 @@ const Quest = () => {
         <DialogTitle id="alert-dialog-title">{alternativeIncorrect ? 'Ops, você errou, mas continue estudando para melhorar' : 'Muito bem, conseguiu acertar'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
+            {!!showAlternativesCorrect.length && 'Abaixo as resposta(s) correta(s)'}
             {!!showAlternativesCorrect.length && showAlternativesCorrect.map((alternative) => (
               <p key={alternative.id}>{alternative.description}</p>
             ))}

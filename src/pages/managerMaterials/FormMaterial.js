@@ -142,7 +142,7 @@ const FormMaterial = () => {
 
   console.log('material: ', material)
 
-  if(loading || !material){
+  if(loading || (!isNew() && !material)){
     return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
