@@ -6,6 +6,7 @@ export const Title = styled.h1`
 `;
 
 export const Content = styled.div`
+  display: flex;
   margin: 10px;
 `;
 

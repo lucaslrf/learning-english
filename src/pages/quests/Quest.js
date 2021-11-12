@@ -61,6 +61,7 @@ const Quest = () => {
     useEffect(() => {
       setLoading(true)
       const data = pathCurrent.state;
+      console.log('dataQuest: ', data)
       setQuest(data.quest);
       setLoading(false)
     }, [pathCurrent.state]);
@@ -122,7 +123,8 @@ const Quest = () => {
     <ActionsHeader />
 
       <Content>
-        <Title>
+        <div>
+          <Title>
             {quest.name_quest}
           </Title>
           <Typography component="p" variant="body1">
@@ -133,6 +135,10 @@ const Quest = () => {
             {quest.question}
           </Typography>
           <AlternativesQuests alternativesQuest={data.alternatives} handleChange={handleChange} valueAlternativeRadio={valueAlternativeChecked} />
+        </div>
+        <div>
+          <img src={`${process.env.REACT_APP_HOST_SERVER}/${quest?.path_image}`} alt="Imagem da quest" />
+        </div>
       </Content>
        <FooterActions>
             <Button onClick={() => onNext()}>Next</Button>
