@@ -53,14 +53,14 @@ const ContentGame = () => {
           <Button onClick={() => onBack()}>Voltar</Button>
         </div>
       </Actions>
-      <Content>
+      <div>
         <Title>
           {pathCurrent.state.name}
         </Title>
         <Typography component="h6" variant="h6">
           {pathCurrent.state.description}
         </Typography>
-      </Content>
+      </div>
 
       <FooterActions>
         <Button onClick={() => onContinue()}>Continuar</Button>

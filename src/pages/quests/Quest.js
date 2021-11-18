@@ -119,9 +119,7 @@ const Quest = () => {
 
   return (
     <React.Fragment>
-
     <ActionsHeader />
-
       <Content>
         <div>
           <Title>
