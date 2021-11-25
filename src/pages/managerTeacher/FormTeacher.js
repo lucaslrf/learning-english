@@ -6,6 +6,7 @@ import { Container, Actions } from "./styleTeacher";
 import { makeStyles } from '@material-ui/core/styles';
 import Form from '../../components/Form';
 import api from "../../services/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
     marginLeft: theme.spacing(1),
   },
+  buttonProgress: {
+    textAlign: 'center',
+    marginLeft: '50%'
+  }
 }));
 
 const FormTeacher = () => {
@@ -46,7 +51,9 @@ const FormTeacher = () => {
 
     const loadTeacher = async () => {
       const idTeacher = isNew() ? null : id;
+      console.log('idTeacher: ', idTeacher)
       if (!idTeacher) {
+        setLoading(false);
         return;
       }
 
@@ -92,7 +99,7 @@ const FormTeacher = () => {
         `/register/teacher`,
         newData
       );
-      console.log('DATA CREATE Narrative', newData)
+      console.log('DATA CREATE Teacher', newData)
     } else {
       result = await api.put(
         `/edit/teacher/${id}`,
@@ -114,10 +121,10 @@ const FormTeacher = () => {
   }
 
   if(loading){
-    return (
-      <div></div>
-    )
+    return <CircularProgress size={24} className={classes.buttonProgress} />
   }
+
+  console.log('loading: ', loading)
 
   return (
     <Container>

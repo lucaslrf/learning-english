@@ -34,7 +34,7 @@ const TeacherList = () => {
       disablePadding: true,
       label: "Nome",
     },
-    { id: "email", disablePadding: true, label: "Email" },
+    { id: "email", disablePadding: true, label: "Email" }
   ];
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const TeacherList = () => {
           <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
+      <DataTable nameEntityApi={"teacher"} rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
     </React.Fragment>
   );
 };

@@ -1,32 +1,26 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import DatatableHead from "./DatatableHead";
 import DatatableToolbar from "./DatatableToolbar";
-import { DataGrid } from "@material-ui/data-grid";
-import { EditButton } from "./styled";
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Button } from "@material-ui/core";
 import { useHistory, useRouteMatch } from "react-router";
+import api from "../services/api";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import SearchBar from "material-ui-search-bar";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -82,6 +76,7 @@ export default function EnhancedTable({
   rowsTable,
   headCellsTable,
   nameTable,
+  nameEntityApi = null,
   itemsPerPage = null,
   setItemsPerPage = null
 }) {
@@ -95,10 +90,25 @@ export default function EnhancedTable({
   const [rows, setRows] = useState(rowsTable);
   const [headCells, setHeadCells] = useState(headCellsTable);
   const [nameEntity, setNameEntity] = useState(nameTable);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [idEntityOperation, setIdEntityOperation] = useState(null);
+  const [searched, setSearched] = useState("");
   const history = useHistory();
   let { path, url } = useRouteMatch();
 
   console.log("headcells datatable: ", rows, headCells);
+
+  const requestSearch = (searchedVal) => {
+    const filteredRows = rowsTable.filter((row) => {
+      return row.name.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    setRows(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -156,6 +166,22 @@ export default function EnhancedTable({
     const idEntity = event.currentTarget.value;
     history.push(`${path}/edit/${idEntity}`);
   }
+  
+  const handleClickRemove = async (event) => {
+    const idEntity = event.currentTarget.value;
+    setIdEntityOperation(idEntity)
+    setOpenDialog(true)
+  }
+
+  const handleConfirmRemove = async () => {
+    const { data } = await api.delete(`/remove/${nameEntityApi}/${idEntityOperation}`);
+    // history.push(`${path}`);
+    window.location.reload();
+  }
+
+  const handleClose = () => {
+    setOpenDialog(false);
+  };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -164,6 +190,11 @@ export default function EnhancedTable({
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
+        <SearchBar
+          value={searched}
+          onChange={(searchVal) => requestSearch(searchVal)}
+          onCancelSearch={() => cancelSearch()}
+        />
         <DatatableToolbar
           numSelected={selected.length}
           nameTable={nameEntity}
@@ -194,20 +225,20 @@ export default function EnhancedTable({
                   console.log('row row row:', row);
                   return (
                     <TableRow
-                      hover
+                      // hover
                       // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={`${row.name}-${index}`}
-                      selected={isItemSelected}
+                      // role="checkbox"
+                      // aria-checked={isItemSelected}
+                      // tabIndex={-1}
+                      // key={`${row.name}-${index}`}
+                      // selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
+                        {/* <Checkbox
                           onClick={(event) => handleClick(event, row.name)}
                           checked={isItemSelected}
                           inputProps={{ "aria-labelledby": labelId }}
-                        />
+                        /> */}
                       </TableCell>
                       {headCells.map((attribute, index) => (
                         <TableCell
@@ -222,7 +253,9 @@ export default function EnhancedTable({
                       <TableCell padding="none">
                           <Button key={`edit-${row.id}`} value={row.id} onClick={(evt) => handleClickEdit(evt)}><EditIcon /></Button>
                       </TableCell>
-
+                      <TableCell padding="none">
+                          <Button key={`remove-${row.id}`} value={row.id} onClick={(evt) => handleClickRemove(evt)}><DeleteIcon /></Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -245,6 +278,27 @@ export default function EnhancedTable({
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      <Dialog
+        open={openDialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirme a exclusão</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+              Deseja realmente excluir esse registro? Todas as informações relacionadas serão deletadas
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmRemove} color="primary" autoFocus>
+            Sim
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Não
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

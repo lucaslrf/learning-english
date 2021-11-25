@@ -17,15 +17,15 @@ export default function DatatableHead(props) {
   };
 
   return (
-    <TableHead>
+    <TableHead style={{ borderBottom: "1px solid rgba(224, 224, 224, 1)" }}>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          {/* <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{ 'aria-label': 'select all desserts' }}
-          />
+          /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
