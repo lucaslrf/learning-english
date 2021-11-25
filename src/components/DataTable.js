@@ -98,11 +98,20 @@ export default function EnhancedTable({
 
   console.log("headcells datatable: ", rows, headCells);
 
-  const requestSearch = (searchedVal) => {
-    const filteredRows = rowsTable.filter((row) => {
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setRows(filteredRows);
+  const requestSearch = async (searchedVal) => {
+    const valueSearch = searchedVal.toLowerCase()
+    if(valueSearch.trim()){
+      const { data } = await api.get(`${nameEntityApi}/${valueSearch}`);
+      console.log('dataSearchDataTable: ', data)
+      setRows(data.teachers)
+    }else{
+      setRows(rowsTable)
+    }
+    
+    // const filteredRows = rowsTable.filter((row) => {
+    //   return row.name.toLowerCase().includes(searchedVal.toLowerCase());
+    // });
+    // setRows(filteredRows);
   };
 
   const cancelSearch = () => {
@@ -191,8 +200,15 @@ export default function EnhancedTable({
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <SearchBar
+          placeholder={'Pesquisa'}
           value={searched}
-          onChange={(searchVal) => requestSearch(searchVal)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              console.log('do validate', e.target.value)
+              requestSearch(e.target.value)
+            }
+          }}
+          // onChange={(searchVal) => requestSearch(searchVal)}
           onCancelSearch={() => cancelSearch()}
         />
         <DatatableToolbar
