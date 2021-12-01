@@ -159,6 +159,7 @@ const FormTeacher = () => {
             name="password" 
             label="Password do professor" 
             variant="outlined" 
+            type="password"
             onChange={handleInput} 
           />
         </div>

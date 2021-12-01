@@ -44,8 +44,8 @@ const FinishedNarrative = () => {
             Narrativa Finalizada!
           </Title>
           <Typography component="h6" variant="h6">
-            Parabéns, você concluiu a narrativa com sucesso e ganhou pontos de acordo com o que acertou.
-            Viva outras aventuras e acumule mais pontos e use para adquirir habilidades
+            Parabéns, você concluiu a narrativa com sucesso e ganhou 800 pontos de acordo com o que acertou.
+            Viva outras aventuras e acumule mais pontos e use para adquirir dicas e mais vocabulários na loja virtual.
           </Typography>
       </Content>
        

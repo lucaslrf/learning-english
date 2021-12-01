@@ -10,6 +10,7 @@ import DataTable from "../../components/DataTable";
 import api from "../../services/api";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import SearchBar from "material-ui-search-bar";
 
 const useStyles = makeStyles((theme) => ({
   buttonProgress: {
@@ -80,7 +81,7 @@ const NarrativeList = () => {
           <Button onClick={() => onCreateNarrative()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
+      <DataTable nameEntityApi={"narrative"} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
     </React.Fragment>
   );
 };

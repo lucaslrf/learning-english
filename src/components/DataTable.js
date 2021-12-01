@@ -39,6 +39,11 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
+
+  if(!array){
+    return;
+  }
+
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -78,13 +83,18 @@ export default function EnhancedTable({
   nameTable,
   nameEntityApi = null,
   itemsPerPage = null,
-  setItemsPerPage = null
+  setItemsPerPage = null,
+  linkNextPage = null,
+  linkPrevPage = null,
+  totalRecords = null,
+  functionNextPage = null,
+  currentPage = null
 }) {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
   const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(currentPage);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage ? itemsPerPage : 5);
   const [rows, setRows] = useState(rowsTable);
@@ -155,7 +165,14 @@ export default function EnhancedTable({
   };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    if(newPage >= 1){
+      functionNextPage(linkNextPage)
+      setPage(currentPage+1);
+    }else if(newPage < 1){
+      functionNextPage(linkPrevPage)
+      setPage(currentPage-1);
+    }
+    
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -287,7 +304,7 @@ export default function EnhancedTable({
           labelRowsPerPage={"Linhas por página"}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={totalRecords}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

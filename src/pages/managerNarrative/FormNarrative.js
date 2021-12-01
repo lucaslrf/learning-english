@@ -186,7 +186,7 @@ const FormNarrative = () => {
           <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${narrative?.path_image}`}>Imagem Anexada</a>
         </div> :<></>}
         <div>
-          <h1>Adicionar Arquivo</h1>
+          <h1>Adicionar Imagem</h1>
           <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>

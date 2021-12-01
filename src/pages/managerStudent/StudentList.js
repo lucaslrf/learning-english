@@ -78,7 +78,7 @@ const StudentList = () => {
           <Button onClick={() => onCreateStudent()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable rowsTable={students} headCellsTable={headCells} nameTable={"Estudantes"} />
+      <DataTable nameEntityApi={"student"} rowsTable={students} headCellsTable={headCells} nameTable={"Estudantes"} />
 
     </React.Fragment>
   );

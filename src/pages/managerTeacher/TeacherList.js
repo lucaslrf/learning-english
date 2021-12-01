@@ -26,6 +26,10 @@ const TeacherList = () => {
   const [loading, setLoading] = useState(true);
   const [teachers, setTeachers] = useState(null)
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [linkNextPage, setLinkNextPage] = useState(null);
+  const [linkPreviousPage, setLinkPreviousPage] = useState(null);
+  const [totalRecords, setTotalRecords] = useState(null)
+  const [currentPage, setCurrentPage] = useState(null)
 
   const headCells = [
     {
@@ -50,6 +54,9 @@ const TeacherList = () => {
         console.log('data: ', data)
 
         setTeachers(data.teachers.data);
+        setLinkNextPage(data.teachers.next_page_url)
+        setTotalRecords(data.teachers.total)
+        setCurrentPage(data.teachers.current_page)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -60,10 +67,28 @@ const TeacherList = () => {
 
   }, []);
 
+  const nextPageTeacher = async (linkNextPage) => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(
+        `${linkNextPage}`
+      );
+
+      console.log('data: ', data)
+      setTeachers(data.teachers.data);
+      setLinkNextPage(data.teachers.next_page_url)
+      setLinkPreviousPage(data.teachers.prev_page_url)
+      setTotalRecords(data.teachers.total)
+      setCurrentPage(data.teachers.current_page)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+
   if (loading) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
   }
-
 
 
   function onCreateTeacher() {
@@ -80,7 +105,7 @@ const TeacherList = () => {
           <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable nameEntityApi={"teacher"} rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
+      <DataTable functionNextPage={nextPageTeacher} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"teacher"} rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
     </React.Fragment>
   );
 };

@@ -92,6 +92,7 @@ const FormQuest = () => {
       console.log('edit quest: ', idQuest)
       
       if (!idQuest) {
+        setLoading(false);
         return;
       }
 
@@ -234,7 +235,7 @@ const FormQuest = () => {
 
   console.log('narratives form quest: ', narratives, alternativesAdded)
 
-  if (loading || !quest) {
+  if (loading) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 
@@ -333,7 +334,7 @@ const FormQuest = () => {
           <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${quest?.path_image}`}>Imagem Anexada</a>
         </div> :<></>}
         <div>
-          <h1>Adicionar Arquivo</h1>
+          <h1>Adicionar Imagem</h1>
           <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
