@@ -25,6 +25,10 @@ const StudentList = () => {
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [students, setStudents] = useState(null)
+  const [linkNextPage, setLinkNextPage] = useState(null);
+  const [linkPreviousPage, setLinkPreviousPage] = useState(null);
+  const [totalRecords, setTotalRecords] = useState(null)
+  const [currentPage, setCurrentPage] = useState(null)
 
   const headCells = [
     {
@@ -50,6 +54,10 @@ const StudentList = () => {
         console.log('data: ', data)
 
         setStudents(data.students.data);
+        setLinkNextPage(data.students.next_page_url)
+        setLinkPreviousPage(data.students.prev_page_url)
+        setTotalRecords(data.students.total)
+        setCurrentPage(data.students.current_page)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -59,6 +67,25 @@ const StudentList = () => {
     loadStudents();
 
   }, []);
+
+  const nextPage = async (linkNextPage) => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(
+        `${linkNextPage}`
+      );
+
+      console.log('data: ', data)
+      setStudents(data.students.data);
+      setLinkNextPage(data.students.next_page_url)
+      setLinkPreviousPage(data.students.prev_page_url)
+      setTotalRecords(data.students.total)
+      setCurrentPage(data.students.current_page)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
 
   if (loading) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
@@ -78,7 +105,7 @@ const StudentList = () => {
           <Button onClick={() => onCreateStudent()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable nameEntityApi={"student"} rowsTable={students} headCellsTable={headCells} nameTable={"Estudantes"} />
+      <DataTable functionNextPage={nextPage} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"student"} rowsTable={students} headCellsTable={headCells} nameTable={"Estudantes"} />
 
     </React.Fragment>
   );
