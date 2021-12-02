@@ -26,6 +26,10 @@ const QuestList = () => {
   const [loading, setLoading] = useState(true);
   const [quests, setQuests] = useState(null)
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [linkNextPage, setLinkNextPage] = useState(null);
+  const [linkPreviousPage, setLinkPreviousPage] = useState(null);
+  const [totalRecords, setTotalRecords] = useState(null)
+  const [currentPage, setCurrentPage] = useState(null)
 
   const history = useHistory();
 
@@ -59,6 +63,10 @@ const QuestList = () => {
         console.log('data get Quest: ', data)
 
         setQuests(data.quests.data);
+        setLinkNextPage(data.quests.next_page_url)
+        setLinkPreviousPage(data.quests.prev_page_url)
+        setTotalRecords(data.quests.total)
+        setCurrentPage(data.quests.current_page)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -68,6 +76,25 @@ const QuestList = () => {
     loadQuests();
 
   }, [itemsPerPage]);
+
+  const nextPage = async (linkNextPage) => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(
+        `${linkNextPage}`
+      );
+
+      console.log('dataQuest: ', data)
+      setQuests(data.quests.data);
+      setLinkNextPage(data.quests.next_page_url)
+      setLinkPreviousPage(data.quests.prev_page_url)
+      setTotalRecords(data.quests.total)
+      setCurrentPage(data.quests.current_page)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
 
   if (loading || !quests) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
@@ -83,7 +110,7 @@ const QuestList = () => {
           <Button onClick={() => onCreateQuest()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable nameEntityApi={"quest"}  itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={quests} headCellsTable={headCells} nameTable={"Quests"} />
+      <DataTable functionNextPage={nextPage} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"quest"}  itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={quests} headCellsTable={headCells} nameTable={"Quests"} />
     </React.Fragment>
   );
 };

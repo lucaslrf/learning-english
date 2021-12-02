@@ -26,6 +26,10 @@ const MaterialList = () => {
   const [loading, setLoading] = useState(true);
   const [materials, setMaterials] = useState(null)
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [linkNextPage, setLinkNextPage] = useState(null);
+  const [linkPreviousPage, setLinkPreviousPage] = useState(null);
+  const [totalRecords, setTotalRecords] = useState(null)
+  const [currentPage, setCurrentPage] = useState(null)
 
   const history = useHistory();
 
@@ -53,6 +57,10 @@ const MaterialList = () => {
         console.log('data: ', data)
 
         setMaterials(data.materials.data);
+        setLinkNextPage(data.materials.next_page_url)
+        setLinkPreviousPage(data.materials.prev_page_url)
+        setTotalRecords(data.materials.total)
+        setCurrentPage(data.materials.current_page)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -62,6 +70,25 @@ const MaterialList = () => {
     loadMaterials();
 
   }, [itemsPerPage]);
+
+  const nextPage = async (linkNextPage) => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(
+        `${linkNextPage}`
+      );
+
+      console.log('dataQuest: ', data)
+      setMaterials(data.materials.data);
+      setLinkNextPage(data.materials.next_page_url)
+      setLinkPreviousPage(data.materials.prev_page_url)
+      setTotalRecords(data.materials.total)
+      setCurrentPage(data.materials.current_page)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
 
   if (loading) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
@@ -83,7 +110,7 @@ const MaterialList = () => {
           <Button onClick={() => onCreateMaterial()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable nameEntityApi={"material"} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={materials} headCellsTable={headCells} nameTable={"Materiais"} />
+      <DataTable functionNextPage={nextPage} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"material"} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={materials} headCellsTable={headCells} nameTable={"Materiais"} />
     </React.Fragment>
   );
 };

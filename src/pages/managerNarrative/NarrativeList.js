@@ -25,6 +25,10 @@ const NarrativeList = () => {
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [narratives, setNarratives] = useState(null);
+  const [linkNextPage, setLinkNextPage] = useState(null);
+  const [linkPreviousPage, setLinkPreviousPage] = useState(null);
+  const [totalRecords, setTotalRecords] = useState(null)
+  const [currentPage, setCurrentPage] = useState(null)
 
   const history = useHistory();
 
@@ -51,6 +55,10 @@ const NarrativeList = () => {
         console.log('data: ', data)
 
         setNarratives(data.narratives.data);
+        setLinkNextPage(data.narratives.next_page_url)
+        setLinkPreviousPage(data.narratives.prev_page_url)
+        setTotalRecords(data.narratives.total)
+        setCurrentPage(data.narratives.current_page)
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -60,6 +68,25 @@ const NarrativeList = () => {
     loadNarratives();
 
   }, [itemsPerPage]);
+
+  const nextPage = async (linkNextPage) => {
+    setLoading(true);
+    try {
+      const { data } = await api.get(
+        `${linkNextPage}`
+      );
+
+      console.log('dataQuest: ', data)
+      setNarratives(data.narratives.data);
+      setLinkNextPage(data.narratives.next_page_url)
+      setLinkPreviousPage(data.narratives.prev_page_url)
+      setTotalRecords(data.narratives.total)
+      setCurrentPage(data.narratives.current_page)
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
 
   if (loading || !narratives) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
@@ -81,7 +108,7 @@ const NarrativeList = () => {
           <Button onClick={() => onCreateNarrative()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable nameEntityApi={"narrative"} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
+      <DataTable functionNextPage={nextPage} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"narrative"} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} rowsTable={narratives} headCellsTable={headCells} nameTable={"Narrativas"} />
     </React.Fragment>
   );
 };
