@@ -119,7 +119,7 @@ const Quest = () => {
 
   return (
     <React.Fragment>
-    <ActionsHeader />
+    <ActionsHeader quest={quest}  />
       <Content>
         <div>
           <Title>
