@@ -8,6 +8,7 @@ import { Title, Container, Actions } from "../../components/globalStyleds";
 import { makeStyles } from "@material-ui/core/styles";
 import Form from "../../components/Form";
 import api from "../../services/api";
+import AlertDialog from '../../components/AlertDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,13 +31,14 @@ const FormNarrative = () => {
   const [narrative, setNarrative] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
+  const [showError, setShowError] = useState(false);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
       name: "",
       description: "",
-      image: "",
+      image: null,
     }
   );
 
@@ -99,13 +101,16 @@ const FormNarrative = () => {
 
     let newData = formInput;
 
-    console.log('newData', newData)
-
     const formData = new FormData();
     formData.append('name', newData.name)
     formData.append('description', newData.description)
     formData.append('imageNarrative', newData.image)
-    console.log('DATA SUBMIT HANDLE 2: ', formData)
+    
+    if(!newData.name.trim() || !newData.description.trim()){
+      setLoading(false);
+      setShowError(true);
+      return;
+    }
 
     const config = {
       headers: {
@@ -191,6 +196,7 @@ const FormNarrative = () => {
           <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
+      <AlertDialog openDialog={showError} setFunctionError={setShowError} messageTitle={'Ops! Houve um problema'} contentMessage={'Verifique se preencheu os campos obrigatórios e tente novamente mais tarde'} ></AlertDialog>
     </Container>
   );
 };
