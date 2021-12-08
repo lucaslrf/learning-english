@@ -13,6 +13,7 @@ import Alternative from "../../components/Alternative";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import api from "../../services/api";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AlertDialog from '../../components/AlertDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,7 @@ const FormQuest = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
   const [alternativesAdded, setAlternativesAdded] = useState([{"id": 1, "description": "", "correct": false}])
+  const [showError, setShowError] = useState(false)
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -57,7 +59,7 @@ const FormQuest = () => {
       score: "",
       question: "",
       description: "",
-      image: "",
+      image: null,
     }
   );
 
@@ -153,8 +155,13 @@ const FormQuest = () => {
     let newData = formInput;
     let dataAlternatives = alternativesAdded;
 
-    newData.narrative_id = valueNarrative.id;
+    if(!valueNarrative){
+      setLoading(false);
+      setShowError(true);
+      return;
+    }
 
+    newData.narrative_id = valueNarrative.id;
     newData.alternatives = dataAlternatives;
 
     console.log('newDataFormaInputQuest: ', newData)
@@ -169,6 +176,14 @@ const FormQuest = () => {
     formData.append('question', newData.question)
     formData.append('imageQuest', newData.image)
     console.log('DATA SUBMIT HANDLE 2: ', formData)
+
+    const verifyAlternativeNull = newData.alternatives.find((item) => !item.description.trim())
+
+    if(!newData.name.trim() || !newData.description.trim() || verifyAlternativeNull || !newData.position.trim() || !newData.score.trim() || !newData.question.trim()){
+      setLoading(false);
+      setShowError(true);
+      return;
+  }
 
     const config = {
       headers: {
@@ -264,6 +279,7 @@ const FormQuest = () => {
             id="outlined-basic"
             name="position"
             label="Posição"
+            type="number"
             variant="outlined"
             required
             defaultValue={isNew() ? '' : quest?.position}
@@ -273,6 +289,7 @@ const FormQuest = () => {
             id="outlined-basic"
             name="score"
             label="Pontos"
+            type="number"
             variant="outlined"
             required
             defaultValue={isNew() ? '' : quest?.score}
@@ -338,6 +355,7 @@ const FormQuest = () => {
           <input type="file" name="image" onChange={handleInputFile}/>    
         </div>
       </Form>
+      <AlertDialog openDialog={showError} setFunctionError={setShowError} messageTitle={'Ops! Houve um problema'} contentMessage={'Verifique se preencheu os campos obrigatórios e tente novamente mais tarde'} ></AlertDialog>
     </Container>
   );
 };
