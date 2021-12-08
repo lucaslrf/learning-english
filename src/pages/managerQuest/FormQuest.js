@@ -344,7 +344,7 @@ const FormQuest = () => {
         </div>
         <div>
           {alternativesAdded && alternativesAdded?.length && alternativesAdded.map((alternative, index) => 
-            <Alternative description={alternative.description} number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
+            <Alternative correct={alternative.correct} description={alternative.description} number={index+1} key={`${alternative}-${index}`} handleChange={onChangeAlternatives} handleChangeCheckBoxAlternative={onChangeCheckboxAlternative}></Alternative>
           )}
         </div>
         {quest?.path_image ? <div>

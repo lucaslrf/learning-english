@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import green from '@material-ui/core/colors/green';
 
-const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,description = null }) => {
+const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,description = null, correct = null }) => {
 
   const colorCheck = green.A400;
 
@@ -33,6 +33,7 @@ const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,des
       style={{marginLeft: '5px'}}
         control={
           <Checkbox
+            checked={correct ? correct : false}
             onChange={(evt) => handleChangeCheckBoxAlternative(number, evt)}
             name={`correct${number}`}
           />
