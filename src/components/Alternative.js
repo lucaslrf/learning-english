@@ -33,7 +33,6 @@ const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,des
       style={{marginLeft: '5px'}}
         control={
           <Checkbox
-            checked={correct ? correct : false}
             onChange={(evt) => handleChangeCheckBoxAlternative(number, evt)}
             name={`correct${number}`}
           />

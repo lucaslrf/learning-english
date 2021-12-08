@@ -108,9 +108,9 @@ const FormMaterial = () => {
     const formData = new FormData();
     formData.append('name', data.formInput.name)
     formData.append('description', data.formInput.description)
-    formData.append('materialImage', data.formInput.image)
+    formData.append('materialImage', data.formInput.image ? data.formInput.image : material?.path)
 
-    if(!data.formInput.name.trim() || !data.formInput.description.trim() || !data.formInput.image){
+    if(!data.formInput.name.trim() || !data.formInput.description.trim() || (!data.formInput.image && !material?.path)){
         setLoading(false);
         setErrorField(true);
         return;
