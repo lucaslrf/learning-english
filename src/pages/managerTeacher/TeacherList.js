@@ -65,7 +65,7 @@ const TeacherList = () => {
 
     loadTeachers();
 
-  }, []);
+  }, [itemsPerPage]);
 
   const nextPageTeacher = async (linkNextPage) => {
     setLoading(true);
@@ -105,7 +105,7 @@ const TeacherList = () => {
           <Button onClick={() => onCreateTeacher()}>Adicionar<AddCircleOutlineIcon style={{ marginLeft: '4px' }} /></Button>
         </div>
       </Actions>
-      <DataTable functionNextPage={nextPageTeacher} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} nameEntityApi={"teacher"} rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
+      <DataTable functionNextPage={nextPageTeacher} linkPrevPage={linkPreviousPage} linkNextPage={linkNextPage} totalRecords={totalRecords} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} nameEntityApi={"teacher"} rowsTable={teachers} headCellsTable={headCells} nameTable={"Professores"} />
     </React.Fragment>
   );
 };

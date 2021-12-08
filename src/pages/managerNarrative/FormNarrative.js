@@ -165,6 +165,7 @@ const FormNarrative = () => {
             name="name" 
             variant="outlined" 
             onChange={handleInput} 
+            required
             defaultValue={isNew() ? '' : narrative?.name} 
             style={{ width: "100%" }}/>
         </div>

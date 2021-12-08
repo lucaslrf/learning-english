@@ -9,6 +9,7 @@ import Form from "../../components/Form";
 import api from "../../services/api";
 import { useHistory, useParams } from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AlertDialog from '../../components/AlertDialog';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,13 +35,14 @@ const FormMaterial = () => {
   const [material, setMaterial] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [errorFields, setErrorField] = useState(false);
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
       name: "",
       description: "",
-      image: "",
+      image: null,
     }
   );
 
@@ -102,13 +104,17 @@ const FormMaterial = () => {
     evt.preventDefault();
 
     let data = { formInput };
-    console.log('DATA SUBMIT HANDLE: ', data.formInput)
 
     const formData = new FormData();
     formData.append('name', data.formInput.name)
     formData.append('description', data.formInput.description)
     formData.append('materialImage', data.formInput.image)
-    console.log('DATA SUBMIT HANDLE 2: ', formData)
+
+    if(!data.formInput.name.trim() || !data.formInput.description.trim() || !data.formInput.image){
+        setLoading(false);
+        setErrorField(true);
+        return;
+    }
 
     const config = {
       headers: {
@@ -163,8 +169,9 @@ const FormMaterial = () => {
             name="name" 
             label="Nome" 
             variant="outlined" 
-            style={{ width: "100%" }} 
+            style={{ width: "100%" }}             
             onChange={handleInput} 
+            required
             defaultValue={isNew() ? '' : material?.name} 
           />
         </div>
@@ -179,16 +186,19 @@ const FormMaterial = () => {
             variant="outlined"
             defaultValue={isNew() ? '' : material?.description}
             onChange={handleInput}
+            required
           />
         </div>
         {material?.path ? <div>
-          <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${material?.path}`}>Imagem Anexada</a>
+          <a target="_blank" href={`${process.env.REACT_APP_HOST_SERVER}/${material?.path}`}>Arquivo Anexado</a>
         </div> :<></>}
         <div>
           <h1>Adicionar Arquivo</h1>
-          <input type="file" name="image" onChange={handleInputFile}/>    
+          <input type="file" name="image" onChange={handleInputFile} required/>    
         </div>
       </Form>
+
+      <AlertDialog openDialog={errorFields} setFunctionError={setErrorField} messageTitle={'Ops! Houve um problema'} contentMessage={'Verifique se preencheu os campos obrigatórios e tente novamente mais tarde'} ></AlertDialog>
     </Container>
   );
 };

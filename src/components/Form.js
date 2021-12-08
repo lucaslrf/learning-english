@@ -25,8 +25,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Form = ({ children, handleSubmit, loading = false }) => {
+const  Form = ({ children, handleSubmit, loading = false }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  function onBack() {
+    history.goBack();
+  }
 
   return (
     <Container>
@@ -44,7 +49,7 @@ const Form = ({ children, handleSubmit, loading = false }) => {
           >
             Save
           </Button>
-          <Button className={classes.button} variant="contained">
+          <Button className={classes.button} variant="contained" onClick={() => onBack()}>
             Cancelar
           </Button>
         </div>
