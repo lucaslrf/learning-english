@@ -22,16 +22,48 @@ import {
     useParams
   } from "react-router-dom";
 import ActionsHeader from "./ActionsHeader";
+import api from "../services/api";
 
 
-const FinishedNarrative = () => {
+const FinishedNarrative = (props) => {
 
     let history = useHistory();
-    
+    const [myPointsWinner, setMyPointsWinner] = useState(null);
+    const [loading, setLoading] = useState(false)
+    console.log('proposFinishedNarrative: ', history)
     function onHome(){  
       console.log('history finished: ', history)
       history.location.pathname = "/"
       history.replace("student/")
+    }
+
+    useEffect(() => {
+      const getMyPoints = async () => {  
+          setLoading(true);
+          if(!history?.location.state){
+            setLoading(false);
+            return;
+          }
+          let result = null;
+          result = await api.get(
+            `/points/${history.location.state}`
+          );
+    
+          if(!result || result.data.error){
+            setLoading(false);
+            return false;
+          }
+           
+          console.log('My points: ', result.data.amount)
+          setLoading(false);
+          setMyPointsWinner(result.data.amount)
+      }
+  
+      getMyPoints()
+    }, [])
+
+    if(loading){
+      return <div />
     }
 
   return (
@@ -44,7 +76,7 @@ const FinishedNarrative = () => {
             Narrativa Finalizada!
           </Title>
           <Typography component="h6" variant="h6">
-            Parabéns, você concluiu a narrativa com sucesso e ganhou 800 pontos de acordo com o que acertou.
+            Parabéns, você concluiu a narrativa com sucesso e ganhou {myPointsWinner} pontos de acordo com o que acertou.
             Viva outras aventuras e acumule mais pontos e use para adquirir dicas e mais vocabulários na loja virtual.
           </Typography>
       </Content>

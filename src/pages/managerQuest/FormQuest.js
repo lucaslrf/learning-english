@@ -89,6 +89,7 @@ const FormQuest = () => {
   useEffect(() => {
 
     const loadQuest = async () => {
+      setLoading(true);
       const idQuest = isNew() ? null : id;
 
       console.log('edit quest: ', idQuest)
@@ -97,8 +98,6 @@ const FormQuest = () => {
         setLoading(false);
         return;
       }
-
-      setLoading(true);
 
       try {
         const { data } = await api.get(
@@ -250,7 +249,7 @@ const FormQuest = () => {
 
   console.log('narratives form quest: ', narratives, alternativesAdded)
 
-  if (loading) {
+  if (loading || (!isNew() && (!quest || !currentNarrative))) {
     return <CircularProgress size={24} className={classes.buttonProgress} />
   }
 

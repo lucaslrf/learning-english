@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   TextField,
@@ -33,6 +33,7 @@ const Alternative = ({ number, handleChange, handleChangeCheckBoxAlternative,des
       style={{marginLeft: '5px'}}
         control={
           <Checkbox
+            defaultChecked={!!correct}
             onChange={(evt) => handleChangeCheckBoxAlternative(number, evt)}
             name={`correct${number}`}
           />

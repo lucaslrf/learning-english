@@ -27,6 +27,7 @@ import AlternativesQuests from "./AlternativesQuests";
 import api from "../../services/api";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import AlertDialog from '../../components/AlertDialog';
 
 const useStyles = makeStyles((theme) => ({
   buttonProgress: {
@@ -47,6 +48,8 @@ const Quest = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [showAlternativesCorrect, setShowAlternativeCorrect] = useState([])
     const [alternativeIncorrect, setAlternativeIncorrect] = useState(false)
+    const [showError, setShowError] = useState(false);
+    const [finishNarrative, setFinishNarrative] = useState(false)
     let history = useHistory();
     
     const [valueAlternativeChecked, setValueAlternativeChecked] = useState(data.alternatives.length ? data.alternatives[0].id : null);
@@ -69,6 +72,12 @@ const Quest = () => {
     async function onNext(){
         console.log('onNext');
         let result = null;
+        console.log('valueAlternativeChecked', valueAlternativeChecked)
+        if(!valueAlternativeChecked){
+            setShowError(true);
+            return;
+        }
+
         if (valueAlternativeChecked) {
           result = await api.post(
             `register/point/quest/${quest.id}/${valueAlternativeChecked}/${quest.narrative_id}`,
@@ -93,12 +102,13 @@ const Quest = () => {
 
       if(result.data.next_narrative_quest.original.narrative_quest){
         setOpenDialog(true)
+        setValueAlternativeChecked(null)
         console.log('history finished: ', history)
         history.location.pathname = "/";
         history.replace(`${path}`, result.data.next_narrative_quest.original.narrative_quest)
       }else{
-        history.location.pathname = "/";
-        history.replace('student/challenges/quest/finished')
+        setOpenDialog(true)
+        setFinishNarrative(true)
       } 
         
     }
@@ -115,6 +125,15 @@ const Quest = () => {
   
     const handleClose = () => {
       setOpenDialog(false);
+      if(finishNarrative){
+        history.location.pathname = "/";
+        history.push(
+          {
+            pathname: 'student/challenges/quest/finished',
+            state: quest.narrative_id
+          }
+        )
+      }
     };
 
   return (
@@ -135,7 +154,7 @@ const Quest = () => {
           <AlternativesQuests alternativesQuest={data.alternatives} handleChange={handleChange} valueAlternativeRadio={valueAlternativeChecked} />
         </div>
         <div>
-          <img src={`${process.env.REACT_APP_HOST_SERVER}/${quest?.path_image}`} alt="Imagem da quest" />
+          {quest?.path_image && <img src={`${process.env.REACT_APP_HOST_SERVER}/${quest?.path_image}`} alt="Imagem da quest" />}
         </div>
       </Content>
        <FooterActions>
@@ -163,7 +182,7 @@ const Quest = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <AlertDialog openDialog={showError} setFunctionError={setShowError} messageTitle={'Ops! Houve um problema'} contentMessage={'Lembre-se, marque pelo menos uma das alternativas'} ></AlertDialog>
     </React.Fragment>
   );
 };

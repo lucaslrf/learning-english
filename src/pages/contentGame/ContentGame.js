@@ -57,9 +57,12 @@ const ContentGame = () => {
         <Title>
           {pathCurrent.state.name}
         </Title>
+      <div style={{display: 'flex'}}>
         <Typography component="h6" variant="h6">
           {pathCurrent.state.description}
-        </Typography>
+        </Typography>  
+        {narrative?.path_image && <img style={{width: '50%'}} src={`${process.env.REACT_APP_HOST_SERVER}/${narrative?.path_image}`} alt="Imagem da narrativa" />}
+        </div>
       </div>
 
       <FooterActions>
